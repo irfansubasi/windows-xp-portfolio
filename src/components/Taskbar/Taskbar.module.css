@@ -1,0 +1,40 @@
+.taskbar {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 30px;
+  background: linear-gradient(var(--xp-gradient));
+  z-index: 1;
+}
+
+#startButton {
+  width: 100px;
+  height: 100%;
+  background-image: url('/assets/start_btn_normal.png');
+  background-size: cover;
+  flex-shrink: 0;
+}
+
+.bar {
+  justify-content: flex-start;
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+}
+
+.system-tray {
+  background: linear-gradient(var(--system-tray));
+  border-left: 1px solid rgb(16, 66, 175);
+  box-shadow: #18bbff 1px 0 1px inset;
+  padding: 0 10px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  max-width: 200px;
+  height: 100%;
+}
