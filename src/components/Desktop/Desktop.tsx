@@ -9,90 +9,89 @@ interface DesktopIcon {
 
 const desktopIcons: DesktopIcon[] = [
   { id: 'resume', name: 'Resume', icon: '/assets/PDF.ico' },
-  {
-    id: 'aboutme',
-    name: 'About Me',
-    icon: '/assets/Information.png',
-  },
-  {
-    id: 'contact',
-    name: 'Contact Me',
-    icon: '/assets/mail.png',
-  },
+  { id: 'aboutme', name: 'About Me', icon: '/assets/Information.png' },
+  { id: 'contact', name: 'Contact Me', icon: '/assets/mail.png' },
 ];
 
 export const Desktop = () => {
   const [icons] = useState(desktopIcons);
-  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
+  const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
+
   const desktopRef = useRef<HTMLDivElement>(null);
+  const iconRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (isSelecting && desktopRef.current) {
-        const rect = desktopRef.current.getBoundingClientRect();
-        setCurrentPos({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-        });
-      }
+    const handleMove = (e: MouseEvent) => {
+      if (!isSelecting || !desktopRef.current) return;
+      const rect = desktopRef.current.getBoundingClientRect();
+      setCurrentPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+
+      const selection = {
+        left: Math.min(startPos.x, e.clientX - rect.left),
+        top: Math.min(startPos.y, e.clientY - rect.top),
+        right: Math.max(startPos.x, e.clientX - rect.left),
+        bottom: Math.max(startPos.y, e.clientY - rect.top),
+      };
+
+      const nextSelected: string[] = [];
+
+      icons.forEach((icon) => {
+        const el = iconRefs.current[icon.id];
+        if (!el) return;
+
+        const iconRect = el.getBoundingClientRect();
+
+        const box = {
+          left: iconRect.left - rect.left,
+          top: iconRect.top - rect.top,
+          right: iconRect.right - rect.left,
+          bottom: iconRect.bottom - rect.top,
+        };
+
+        const intersects = !(
+          selection.right < box.left ||
+          selection.left > box.right ||
+          selection.bottom < box.top ||
+          selection.top > box.bottom
+        );
+
+        if (intersects) nextSelected.push(icon.id);
+      });
+
+      setSelectedIcons(nextSelected);
     };
 
-    const handleGlobalMouseUp = () => {
-      if (isSelecting) {
-        setIsSelecting(false);
-      }
-    };
+    const handleUp = () => setIsSelecting(false);
 
     if (isSelecting) {
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
+      document.addEventListener('mousemove', handleMove);
+      document.addEventListener('mouseup', handleUp);
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('mouseup', handleUp);
     };
-  }, [isSelecting]);
-
-  const handleDesktopClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    const isIcon = target.closest(`.${styles.icon}`);
-
-    if (!isIcon) {
-      setSelectedIcon(null);
-    }
-  };
-
-  const handleIconClick = (e: React.MouseEvent, iconId: string) => {
-    e.stopPropagation();
-    setSelectedIcon(iconId);
-  };
+  }, [isSelecting, startPos, icons]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    const isIcon = target.closest(`.${styles.icon}`);
+    const rect = desktopRef.current?.getBoundingClientRect();
+    if (!desktopRef.current || !rect) return;
 
-    if (!isIcon && desktopRef.current) {
-      const rect = desktopRef.current.getBoundingClientRect();
-
+    const isIcon = (e.target as HTMLElement).closest(`.${styles.icon}`);
+    if (!isIcon) {
+      setSelectedIcons([]);
       setIsSelecting(true);
-
-      setStartPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-      setCurrentPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
+      setStartPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setCurrentPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     }
   };
 
   return (
-    <div className={styles.desktop} onClick={handleDesktopClick}>
+    <div className={styles.desktop}>
       <div
         ref={desktopRef}
         className={styles['without-taskbar']}
@@ -102,8 +101,14 @@ export const Desktop = () => {
           {icons.map((icon) => (
             <div
               key={icon.id}
+              ref={(el) => {
+                iconRefs.current[icon.id] = el;
+              }}
               className={styles.icon}
-              onClick={(e) => handleIconClick(e, icon.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIcons([icon.id]);
+              }}
             >
               <img
                 src={icon.icon}
@@ -113,7 +118,7 @@ export const Desktop = () => {
               />
               <span
                 className={`${styles['icon-name']} ${
-                  selectedIcon === icon.id ? styles.selected : ''
+                  selectedIcons.includes(icon.id) ? styles.selected : ''
                 }`}
               >
                 {icon.name}
@@ -121,6 +126,7 @@ export const Desktop = () => {
             </div>
           ))}
         </div>
+
         {isSelecting && (
           <div
             className={styles['selection-box']}
