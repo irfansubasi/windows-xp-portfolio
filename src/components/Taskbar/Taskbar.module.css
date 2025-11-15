@@ -18,6 +18,10 @@
   flex-shrink: 0;
 }
 
+#startButton:hover {
+  filter: brightness(1.1);
+}
+
 .bar {
   justify-content: flex-start;
   flex-grow: 1;

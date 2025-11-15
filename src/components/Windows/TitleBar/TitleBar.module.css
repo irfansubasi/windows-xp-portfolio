@@ -1,0 +1,54 @@
+.titleBar {
+  padding: 4px;
+  background-image: linear-gradient(var(--titlebar-gradient));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.75rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.titleIcon {
+  width: 20px;
+  max-width: 100%;
+  height: auto;
+}
+
+.titleText {
+  font-family: 'Trebuchet MS', 'MSSS', sans-serif;
+  font-weight: 700;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  color: #ffffff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  margin-left: 4px;
+}
+
+.titleControls {
+  display: flex;
+  gap: 4px;
+}
+
+.controlButton {
+  width: 20px;
+  height: 20px;
+  cursor: url('/assets/cursors/default_link.cur'), auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controlButton img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.controlButton:hover {
+  filter: brightness(1.1);
+}
