@@ -1,0 +1,42 @@
+.menubar {
+  background-color: #ece9d8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #d6d3d1;
+}
+
+.menuItems {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.menuItem {
+  font-size: 11px;
+  padding: 7px 8px;
+}
+
+.menuItem:hover {
+  color: #ffffff;
+  background-color: #2563eb;
+}
+
+.windowsLogo {
+  width: 40px;
+  height: -webkit-fill-available;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+}
+
+.windowsLogoImage {
+  width: 20px;
+  height: 20px;
+  background-image: url('/assets/ms.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
