@@ -13,6 +13,7 @@ export const WindowManager = () => {
           title={window.title}
           icon={window.icon}
           position={window.position}
+          size={window.size}
           zIndex={window.zIndex}
         >
           {window.content}

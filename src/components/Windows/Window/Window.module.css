@@ -3,8 +3,6 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   -webkit-font-smoothing: antialiased;
-  width: 700px;
-  height: 500px;
   min-width: 500px;
   min-height: 400px;
   z-index: 12;
@@ -30,4 +28,74 @@
   width: 100%;
   overflow: hidden;
   flex-grow: 1;
+}
+
+.resizeHandle {
+  position: absolute;
+  background: transparent;
+  z-index: 50;
+}
+
+.resizeHandle[data-direction='n'] {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+.resizeHandle[data-direction='s'] {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+.resizeHandle[data-direction='e'] {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+.resizeHandle[data-direction='w'] {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+.resizeHandle[data-direction='nw'] {
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+}
+
+.resizeHandle[data-direction='ne'] {
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nesw-resize;
+}
+
+.resizeHandle[data-direction='sw'] {
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nesw-resize;
+}
+
+.resizeHandle[data-direction='se'] {
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
 }

@@ -13,6 +13,7 @@ export interface WindowData {
   icon: string;
   content: ReactNode;
   position: { x: number; y: number };
+  size: { width: number; height: number };
   zIndex: number;
   order: number;
   isMinimized?: boolean;
@@ -33,6 +34,10 @@ interface WindowContextType {
     id: string,
     position: { x: number; y: number }
   ) => void;
+  updateWindowSize: (
+    id: string,
+    size: { width: number; height: number }
+  ) => void;
 }
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
@@ -51,6 +56,8 @@ interface WindowProviderProps {
 
 const BASE_Z_INDEX = 1000;
 const WINDOW_OFFSET = 30;
+const DEFAULT_WINDOW_WIDTH = 700;
+const DEFAULT_WINDOW_HEIGHT = 500;
 
 const recalculateZIndexes = (
   windows: WindowData[],
@@ -117,6 +124,10 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           icon,
           content,
           position: newPosition,
+          size: {
+            width: DEFAULT_WINDOW_WIDTH,
+            height: DEFAULT_WINDOW_HEIGHT,
+          },
           zIndex: BASE_Z_INDEX,
           order: nextOrderRef.current++,
           isMinimized: false,
@@ -150,6 +161,13 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
     []
   );
 
+  const updateWindowSize = useCallback(
+    (id: string, size: { width: number; height: number }) => {
+      setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, size } : w)));
+    },
+    []
+  );
+
   return (
     <WindowContext.Provider
       value={{
@@ -158,6 +176,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
         closeWindow,
         focusWindow,
         updateWindowPosition,
+        updateWindowSize,
       }}
     >
       {children}
