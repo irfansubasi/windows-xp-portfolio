@@ -13,10 +13,17 @@
   gap: 8px;
 }
 
+.toolbarItem:not(:has(.icon.disabled)):hover {
+  background-color: #f8f5e3;
+}
+
 .icon {
-  filter: grayscale(100%);
   width: 25px;
   height: 25px;
+}
+
+.icon.disabled {
+  filter: grayscale(100%);
 }
 
 .label {

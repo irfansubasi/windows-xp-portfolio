@@ -7,6 +7,13 @@ import {
   type ReactNode,
 } from 'react';
 
+export interface ToolbarItem {
+  icon: string;
+  label?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
 export interface WindowData {
   id: string;
   title: string;
@@ -18,6 +25,7 @@ export interface WindowData {
   order: number;
   isMinimized?: boolean;
   isMaximized?: boolean;
+  toolbarItems?: ToolbarItem[];
 }
 
 interface WindowContextType {
@@ -27,7 +35,8 @@ interface WindowContextType {
     title: string,
     icon: string,
     content: ReactNode,
-    size?: { width: number; height: number }
+    size?: { width: number; height: number },
+    toolbarItems?: ToolbarItem[]
   ) => void;
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
@@ -113,7 +122,8 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
       title: string,
       icon: string,
       content: ReactNode,
-      customSize?: { width: number; height: number }
+      customSize?: { width: number; height: number },
+      toolbarItems?: ToolbarItem[]
     ) => {
       setWindows((prev) => {
         const existing = prev.find((w) => w.id === id);
@@ -139,6 +149,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           order: nextOrderRef.current++,
           isMinimized: false,
           isMaximized: false,
+          toolbarItems,
         };
 
         const updatedWindows = [...prev, newWindow];

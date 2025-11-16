@@ -28,8 +28,16 @@ export const Window = ({
   size: initialSize,
   zIndex,
 }: WindowProps) => {
-  const { updateWindowPosition, updateWindowSize, focusWindow, closeWindow } =
-    useWindowContext();
+  const {
+    windows,
+    updateWindowPosition,
+    updateWindowSize,
+    focusWindow,
+    closeWindow,
+  } = useWindowContext();
+
+  const currentWindow = windows.find((w) => w.id === id);
+  const toolbarItems = currentWindow?.toolbarItems;
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -278,7 +286,7 @@ export const Window = ({
       />
       <div className={styles.content}>
         <Menubar />
-        <Toolbar />
+        <Toolbar items={toolbarItems} />
         <AddressBar path={path} icon={icon} />
         <WindowContent>{children}</WindowContent>
       </div>

@@ -5,8 +5,11 @@ import { AboutMeContent } from '../Windows/WindowContent/AboutMeContent';
 import { ContactContent } from '../Windows/WindowContent/ContactContent';
 import { useWindowContext } from '../../context/WindowContext';
 
+import type { ToolbarItem } from '../../context/WindowContext';
+
 interface WindowConfig {
   size?: { width: number; height: number };
+  toolbarItems?: ToolbarItem[];
 }
 
 interface DesktopIcon {
@@ -25,6 +28,11 @@ const desktopIcons: DesktopIcon[] = [
     windowContent: <ResumeContent />,
     windowConfig: {
       size: { width: 700, height: 800 },
+      toolbarItems: [
+        { icon: '/assets/Search.png', label: 'Zoom' },
+        { icon: '/assets/Save.png', label: 'Save' },
+        { icon: '/assets/mail.png', label: 'Contact Me' },
+      ],
     },
   },
   {
@@ -145,7 +153,8 @@ export const Desktop = () => {
                   icon.name,
                   icon.icon,
                   icon.windowContent,
-                  icon.windowConfig?.size
+                  icon.windowConfig?.size,
+                  icon.windowConfig?.toolbarItems
                 );
               }}
             >
