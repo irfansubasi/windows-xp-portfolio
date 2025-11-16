@@ -1,19 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, type ReactNode } from 'react';
 import styles from './Desktop.module.css';
+import { ResumeContent } from '../Windows/WindowContent/ResumeContent';
+import { AboutMeContent } from '../Windows/WindowContent/AboutMeContent';
+import { ContactContent } from '../Windows/WindowContent/ContactContent';
+import { useWindowContext } from '../../context/WindowContext';
 
 interface DesktopIcon {
   id: string;
   name: string;
   icon: string;
+  windowContent: ReactNode;
 }
 
 const desktopIcons: DesktopIcon[] = [
-  { id: 'resume', name: 'Resume', icon: '/assets/PDF.ico' },
-  { id: 'aboutme', name: 'About Me', icon: '/assets/Information.png' },
-  { id: 'contact', name: 'Contact Me', icon: '/assets/mail.png' },
+  {
+    id: 'resume',
+    name: 'Resume',
+    icon: '/assets/PDF.ico',
+    windowContent: <ResumeContent />,
+  },
+  {
+    id: 'aboutme',
+    name: 'About Me',
+    icon: '/assets/Information.png',
+    windowContent: <AboutMeContent />,
+  },
+  {
+    id: 'contact',
+    name: 'Contact Me',
+    icon: '/assets/mail.png',
+    windowContent: <ContactContent />,
+  },
 ];
 
 export const Desktop = () => {
+  const { openWindow } = useWindowContext();
   const [icons] = useState(desktopIcons);
   const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -108,6 +129,10 @@ export const Desktop = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedIcons([icon.id]);
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                openWindow(icon.id, icon.name, icon.icon, icon.windowContent);
               }}
             >
               <img

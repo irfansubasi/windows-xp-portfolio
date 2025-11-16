@@ -28,6 +28,55 @@
   flex-grow: 1;
   height: 100%;
   display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 0 2px 0;
+}
+
+.taskbar-button {
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  max-width: 200px;
+  min-width: 70px;
+  width: 150px;
+  height: 100%;
+  user-select: none;
+  background: rgb(60, 129, 243);
+  box-shadow: rgba(0, 0, 0, 0.3) -1px 0px inset,
+    rgba(255, 255, 255, 0.2) 1px 1px 1px inset;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.taskbar-button:hover {
+  filter: brightness(1.25);
+}
+
+.taskbar-button.active {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px 1px inset,
+    rgba(0, 0, 0, 0.7) 1px 0px 1px inset;
+  background: rgb(30, 82, 183);
+}
+
+.taskbar-button-icon {
+  pointer-events: none;
+  margin-left: 8px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.taskbar-button-text {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  line-height: 1;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  margin: 0 4px;
 }
 
 .system-tray {

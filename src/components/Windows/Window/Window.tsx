@@ -4,44 +4,53 @@ import { TitleBar } from '../TitleBar/TitleBar';
 import { Menubar } from '../MenuBar/Menubar';
 import { Toolbar } from '../Toolbar/Toolbar';
 import { AddressBar } from '../AddressBar/AddressBar';
+import { useWindowContext } from '../../../context/WindowContext';
+import { WindowContent } from '../WindowContent/WindowContent';
 
 interface WindowProps {
+  id: string;
   title: string;
   children: ReactNode;
   icon?: string;
-  initialX?: number;
-  initialY?: number;
+  position: { x: number; y: number };
+  zIndex: number;
 }
 
 export const Window = ({
+  id,
   title,
   children,
   icon,
-  initialX,
-  initialY,
+  position: initialPosition,
+  zIndex,
 }: WindowProps) => {
-  const [position, setPosition] = useState(() => {
-    if (initialX !== undefined && initialY !== undefined) {
-      return { x: initialX, y: initialY };
-    }
-    return { x: 0, y: 0 };
-  });
+  const { updateWindowPosition, focusWindow, closeWindow } = useWindowContext();
+  const [position, setPosition] = useState(initialPosition);
+  const windowRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
+  const lastPositionRef = useRef(initialPosition);
 
   useEffect(() => {
-    if (windowRef.current && initialX === undefined && initialY === undefined) {
+    if (
+      windowRef.current &&
+      initialPosition.x === 0 &&
+      initialPosition.y === 0
+    ) {
       const rect = windowRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      setPosition({
+      const centeredPosition = {
         x: (viewportWidth - rect.width) / 2,
         y: (viewportHeight - rect.height) / 2,
-      });
+      };
+      setPosition(centeredPosition);
+      lastPositionRef.current = centeredPosition;
+      updateWindowPosition(id, centeredPosition);
     }
-  }, [initialX, initialY]);
+  }, [id, updateWindowPosition, initialPosition.x, initialPosition.y]);
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const windowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -62,15 +71,20 @@ export const Window = ({
         const maxY = viewportHeight - 50;
         newY = Math.max(minY, Math.min(maxY, newY));
 
-        setPosition({ x: newX, y: newY });
+        const newPosition = { x: newX, y: newY };
+        setPosition(newPosition);
+        lastPositionRef.current = newPosition;
       }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      isDraggingRef.current = false;
+      updateWindowPosition(id, lastPositionRef.current);
     };
 
     if (isDragging) {
+      isDraggingRef.current = true;
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     }
@@ -79,11 +93,12 @@ export const Window = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, id, updateWindowPosition]);
 
   const handleTitleBarMouseDown = (e: React.MouseEvent) => {
     if (!windowRef.current) return;
 
+    focusWindow(id);
     const rect = windowRef.current.getBoundingClientRect();
     setIsDragging(true);
     setDragOffset({
@@ -105,18 +120,20 @@ export const Window = ({
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
+        zIndex: zIndex,
       }}
     >
       <TitleBar
         title={title}
         icon={icon}
         onMouseDown={handleTitleBarMouseDown}
+        onClose={() => closeWindow(id)}
       />
       <div className={styles.content}>
         <Menubar />
         <Toolbar />
         <AddressBar path={path} icon={icon} />
-        {children}
+        <WindowContent>{children}</WindowContent>
       </div>
     </div>
   );
