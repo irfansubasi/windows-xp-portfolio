@@ -2,6 +2,7 @@
   display: flex;
   align-self: center;
   background-color: #ece9d8;
+  width: 100%;
 }
 
 .toolbarItem {

@@ -28,7 +28,7 @@ body {
   font-family: 'MSSS', Tahoma, Trebuchet MS, Arial, sans-serif;
   font-size: 12px;
   background: #008080;
-  cursor: url('/assets/cursors/arrow_m.cur'), auto;
+  cursor: url('/assets/cursors/default_arrow.cur'), auto;
 }
 
 button {

@@ -1,0 +1,39 @@
+.addressBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #d6d3d1;
+  border-bottom: 1px solid #d6d3d1;
+  background-color: #ece9d8;
+}
+
+.addressBarText {
+  padding: 0 8px;
+  user-select: none;
+}
+
+.addressBarPath {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  height: 25px;
+  flex-grow: 1;
+  gap: 10px;
+  font-size: 11px;
+  padding-left: 4px;
+}
+
+.icon {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+
+.goButton {
+  width: 30px;
+  height: 20px;
+  background-image: url('/assets/go.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
