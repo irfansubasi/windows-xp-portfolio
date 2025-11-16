@@ -5,11 +5,16 @@ import { AboutMeContent } from '../Windows/WindowContent/AboutMeContent';
 import { ContactContent } from '../Windows/WindowContent/ContactContent';
 import { useWindowContext } from '../../context/WindowContext';
 
+interface WindowConfig {
+  size?: { width: number; height: number };
+}
+
 interface DesktopIcon {
   id: string;
   name: string;
   icon: string;
   windowContent: ReactNode;
+  windowConfig?: WindowConfig;
 }
 
 const desktopIcons: DesktopIcon[] = [
@@ -18,6 +23,9 @@ const desktopIcons: DesktopIcon[] = [
     name: 'Resume',
     icon: '/assets/PDF.ico',
     windowContent: <ResumeContent />,
+    windowConfig: {
+      size: { width: 700, height: 800 },
+    },
   },
   {
     id: 'aboutme',
@@ -132,7 +140,13 @@ export const Desktop = () => {
               }}
               onDoubleClick={(e) => {
                 e.stopPropagation();
-                openWindow(icon.id, icon.name, icon.icon, icon.windowContent);
+                openWindow(
+                  icon.id,
+                  icon.name,
+                  icon.icon,
+                  icon.windowContent,
+                  icon.windowConfig?.size
+                );
               }}
             >
               <img

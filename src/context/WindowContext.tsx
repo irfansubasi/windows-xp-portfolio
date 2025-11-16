@@ -26,7 +26,8 @@ interface WindowContextType {
     id: string,
     title: string,
     icon: string,
-    content: ReactNode
+    content: ReactNode,
+    size?: { width: number; height: number }
   ) => void;
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
@@ -107,7 +108,13 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
   const nextOrderRef = useRef(0);
 
   const openWindow = useCallback(
-    (id: string, title: string, icon: string, content: ReactNode) => {
+    (
+      id: string,
+      title: string,
+      icon: string,
+      content: ReactNode,
+      customSize?: { width: number; height: number }
+    ) => {
       setWindows((prev) => {
         const existing = prev.find((w) => w.id === id);
         if (existing) {
@@ -124,7 +131,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           icon,
           content,
           position: newPosition,
-          size: {
+          size: customSize || {
             width: DEFAULT_WINDOW_WIDTH,
             height: DEFAULT_WINDOW_HEIGHT,
           },
