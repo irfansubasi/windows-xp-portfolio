@@ -7,6 +7,7 @@ interface TitleBarProps {
   onMaximize?: () => void;
   onClose?: () => void;
   onMouseDown?: (e: React.MouseEvent) => void;
+  isMaximized?: boolean;
 }
 
 export const TitleBar = ({
@@ -16,6 +17,7 @@ export const TitleBar = ({
   onMaximize,
   onClose,
   onMouseDown,
+  isMaximized = false,
 }: TitleBarProps) => {
   return (
     <div className={styles.titleBar} onMouseDown={onMouseDown}>
@@ -38,7 +40,10 @@ export const TitleBar = ({
             onMaximize?.();
           }}
         >
-          <img src="/assets/Maximize.png" alt="maximize" />
+          <img
+            src={isMaximized ? '/assets/Restore.png' : '/assets/Maximize.png'}
+            alt={isMaximized ? 'restore' : 'maximize'}
+          />
         </button>
         <button
           className={styles.controlButton}

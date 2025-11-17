@@ -26,6 +26,8 @@ export interface WindowData {
   isMinimized?: boolean;
   isMaximized?: boolean;
   toolbarItems?: ToolbarItem[];
+  previousPosition?: { x: number; y: number };
+  previousSize?: { width: number; height: number };
 }
 
 interface WindowContextType {
@@ -48,6 +50,7 @@ interface WindowContextType {
     id: string,
     size: { width: number; height: number }
   ) => void;
+  toggleMaximize: (id: string) => void;
 }
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
@@ -68,6 +71,7 @@ const BASE_Z_INDEX = 1000;
 const WINDOW_OFFSET = 30;
 const DEFAULT_WINDOW_WIDTH = 700;
 const DEFAULT_WINDOW_HEIGHT = 500;
+const TASKBAR_HEIGHT = 30;
 
 const recalculateZIndexes = (
   windows: WindowData[],
@@ -150,6 +154,8 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           isMinimized: false,
           isMaximized: false,
           toolbarItems,
+          previousPosition: undefined,
+          previousSize: undefined,
         };
 
         const updatedWindows = [...prev, newWindow];
@@ -186,6 +192,48 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
     []
   );
 
+  const toggleMaximize = useCallback((id: string) => {
+    setWindows((prev) => {
+      const viewportWidth =
+        typeof window !== 'undefined'
+          ? window.innerWidth
+          : DEFAULT_WINDOW_WIDTH;
+      const viewportHeight =
+        typeof window !== 'undefined'
+          ? window.innerHeight
+          : DEFAULT_WINDOW_HEIGHT + TASKBAR_HEIGHT;
+
+      const updated = prev.map((w) => {
+        if (w.id !== id) return w;
+
+        if (!w.isMaximized) {
+          return {
+            ...w,
+            isMaximized: true,
+            previousPosition: w.position,
+            previousSize: w.size,
+            position: { x: 0, y: 0 },
+            size: {
+              width: viewportWidth,
+              height: viewportHeight - TASKBAR_HEIGHT,
+            },
+          };
+        }
+
+        return {
+          ...w,
+          isMaximized: false,
+          position: w.previousPosition ?? w.position,
+          size: w.previousSize ?? w.size,
+          previousPosition: undefined,
+          previousSize: undefined,
+        };
+      });
+
+      return recalculateZIndexes(updated, id);
+    });
+  }, []);
+
   return (
     <WindowContext.Provider
       value={{
@@ -195,6 +243,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
         focusWindow,
         updateWindowPosition,
         updateWindowSize,
+        toggleMaximize,
       }}
     >
       {children}

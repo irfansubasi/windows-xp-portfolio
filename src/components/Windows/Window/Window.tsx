@@ -34,10 +34,12 @@ export const Window = ({
     updateWindowSize,
     focusWindow,
     closeWindow,
+    toggleMaximize,
   } = useWindowContext();
 
   const currentWindow = windows.find((w) => w.id === id);
   const toolbarItems = currentWindow?.toolbarItems;
+  const isMaximized = currentWindow?.isMaximized;
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -56,29 +58,46 @@ export const Window = ({
   });
   const lastSizeRef = useRef(initialSize);
 
-  useEffect(() => {
-    if (
-      windowRef.current &&
-      initialPosition.x === 0 &&
-      initialPosition.y === 0
-    ) {
-      const rect = windowRef.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const centeredPosition = {
-        x: (viewportWidth - rect.width) / 2,
-        y: (viewportHeight - rect.height) / 2,
-      };
-      setPosition(centeredPosition);
-      lastPositionRef.current = centeredPosition;
-      updateWindowPosition(id, centeredPosition);
-    }
-  }, [id, updateWindowPosition, initialPosition.x, initialPosition.y]);
-
-  const currentSize = isResizing ? size : initialSize;
-
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const shouldCenterOnMountRef = useRef(
+    initialPosition.x === 0 && initialPosition.y === 0
+  );
+  const hasCenteredRef = useRef(false);
+
+  useEffect(() => {
+    if (isDragging || isResizing) return;
+    lastPositionRef.current = initialPosition;
+  }, [initialPosition, isDragging, isResizing]);
+
+  useEffect(() => {
+    if (isResizing) return;
+    lastSizeRef.current = initialSize;
+  }, [initialSize, isResizing]);
+
+  useEffect(() => {
+    if (
+      !windowRef.current ||
+      !shouldCenterOnMountRef.current ||
+      hasCenteredRef.current
+    ) {
+      return;
+    }
+    const rect = windowRef.current.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const centeredPosition = {
+      x: (viewportWidth - rect.width) / 2,
+      y: (viewportHeight - rect.height) / 2,
+    };
+    setPosition(centeredPosition);
+    lastPositionRef.current = centeredPosition;
+    hasCenteredRef.current = true;
+    updateWindowPosition(id, centeredPosition);
+  }, [id, updateWindowPosition]);
+
+  const displayPosition = isDragging || isResizing ? position : initialPosition;
+  const currentSize = isResizing ? size : initialSize;
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -124,10 +143,11 @@ export const Window = ({
   }, [isDragging, dragOffset, id, updateWindowPosition]);
 
   const handleTitleBarMouseDown = (e: React.MouseEvent) => {
-    if (!windowRef.current) return;
+    if (!windowRef.current || isMaximized) return;
 
     focusWindow(id);
     const rect = windowRef.current.getBoundingClientRect();
+    setPosition(initialPosition);
     setIsDragging(true);
     setDragOffset({
       x: e.clientX - rect.left,
@@ -140,7 +160,7 @@ export const Window = ({
     direction: ResizeDirection
   ) => {
     e.stopPropagation();
-    if (!windowRef.current) return;
+    if (!windowRef.current || isMaximized) return;
 
     focusWindow(id);
     const rect = windowRef.current.getBoundingClientRect();
@@ -271,8 +291,8 @@ export const Window = ({
       ref={windowRef}
       className={styles.window}
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: `${displayPosition.x}px`,
+        top: `${displayPosition.y}px`,
         width: `${currentSize.width}px`,
         height: `${currentSize.height}px`,
         zIndex: zIndex,
@@ -282,7 +302,9 @@ export const Window = ({
         title={title}
         icon={icon}
         onMouseDown={handleTitleBarMouseDown}
+        onMaximize={() => toggleMaximize(id)}
         onClose={() => closeWindow(id)}
+        isMaximized={!!isMaximized}
       />
       <div className={styles.content}>
         <Menubar />
