@@ -8,6 +8,7 @@ interface TitleBarProps {
   onClose?: () => void;
   onMouseDown?: (e: React.MouseEvent) => void;
   isMaximized?: boolean;
+  isActive?: boolean;
 }
 
 export const TitleBar = ({
@@ -18,9 +19,13 @@ export const TitleBar = ({
   onClose,
   onMouseDown,
   isMaximized = false,
+  isActive = true,
 }: TitleBarProps) => {
   return (
-    <div className={styles.titleBar} onMouseDown={onMouseDown}>
+    <div
+      className={`${styles.titleBar} ${!isActive ? styles.inactive : ''}`}
+      onMouseDown={onMouseDown}
+    >
       {icon && <img src={icon} alt="" className={styles.titleIcon} />}
       <span className={styles.titleText}>{title}</span>
       <div className={styles.titleControls}>

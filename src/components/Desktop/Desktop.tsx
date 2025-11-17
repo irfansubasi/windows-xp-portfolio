@@ -50,7 +50,7 @@ const desktopIcons: DesktopIcon[] = [
 ];
 
 export const Desktop = () => {
-  const { openWindow } = useWindowContext();
+  const { openWindow, focusWindow } = useWindowContext();
   const [icons] = useState(desktopIcons);
   const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -119,7 +119,10 @@ export const Desktop = () => {
     if (!desktopRef.current || !rect) return;
 
     const isIcon = (e.target as HTMLElement).closest(`.${styles.icon}`);
-    if (!isIcon) {
+    const isWindow = (e.target as HTMLElement).closest('[data-window]');
+
+    if (!isIcon && !isWindow) {
+      focusWindow(null);
       setSelectedIcons([]);
       setIsSelecting(true);
       setStartPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });

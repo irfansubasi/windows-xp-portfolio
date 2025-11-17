@@ -32,6 +32,7 @@ export interface WindowData {
 
 interface WindowContextType {
   windows: WindowData[];
+  focusedWindowId: string | null;
   openWindow: (
     id: string,
     title: string,
@@ -41,7 +42,7 @@ interface WindowContextType {
     toolbarItems?: ToolbarItem[]
   ) => void;
   closeWindow: (id: string) => void;
-  focusWindow: (id: string) => void;
+  focusWindow: (id: string | null) => void;
   updateWindowPosition: (
     id: string,
     position: { x: number; y: number }
@@ -118,6 +119,7 @@ const calculateNewWindowPosition = (
 
 export const WindowProvider = ({ children }: WindowProviderProps) => {
   const [windows, setWindows] = useState<WindowData[]>([]);
+  const [focusedWindowId, setFocusedWindowId] = useState<string | null>(null);
   const nextOrderRef = useRef(0);
 
   const openWindow = useCallback(
@@ -159,21 +161,31 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
         };
 
         const updatedWindows = [...prev, newWindow];
+        setFocusedWindowId(id);
         return recalculateZIndexes(updatedWindows, id);
       });
     },
     []
   );
 
-  const closeWindow = useCallback((id: string) => {
-    setWindows((prev) => {
-      const remaining = prev.filter((w) => w.id !== id);
-      return recalculateZIndexes(remaining);
-    });
-  }, []);
+  const closeWindow = useCallback(
+    (id: string) => {
+      setWindows((prev) => {
+        const remaining = prev.filter((w) => w.id !== id);
+        if (focusedWindowId === id) {
+          setFocusedWindowId(null);
+        }
+        return recalculateZIndexes(remaining);
+      });
+    },
+    [focusedWindowId]
+  );
 
-  const focusWindow = useCallback((id: string) => {
-    setWindows((prev) => recalculateZIndexes(prev, id));
+  const focusWindow = useCallback((id: string | null) => {
+    setFocusedWindowId(id);
+    if (id !== null) {
+      setWindows((prev) => recalculateZIndexes(prev, id));
+    }
   }, []);
 
   const updateWindowPosition = useCallback(
@@ -238,6 +250,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
     <WindowContext.Provider
       value={{
         windows,
+        focusedWindowId,
         openWindow,
         closeWindow,
         focusWindow,

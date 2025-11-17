@@ -10,7 +10,7 @@ const systemTrayItems = [
 ];
 
 export const Taskbar = () => {
-  const { windows, focusWindow } = useWindowContext();
+  const { windows, focusedWindowId, focusWindow } = useWindowContext();
   const [time, setTime] = useState<string>('');
 
   useEffect(() => {
@@ -25,13 +25,6 @@ export const Taskbar = () => {
 
   const sortedWindows = [...windows].sort((a, b) => a.order - b.order);
 
-  const activeWindowId =
-    sortedWindows.length > 0
-      ? sortedWindows.reduce((prev, current) =>
-          current.zIndex > prev.zIndex ? current : prev
-        ).id
-      : null;
-
   return (
     <div className={styles.taskbar}>
       <div id={styles.startButton}></div>
@@ -40,7 +33,7 @@ export const Taskbar = () => {
           <button
             key={window.id}
             className={`${styles['taskbar-button']} ${
-              activeWindowId === window.id ? styles.active : ''
+              focusedWindowId === window.id ? styles.active : ''
             }`}
             onClick={() => focusWindow(window.id)}
           >

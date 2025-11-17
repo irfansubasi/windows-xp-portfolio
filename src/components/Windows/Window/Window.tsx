@@ -30,6 +30,7 @@ export const Window = ({
 }: WindowProps) => {
   const {
     windows,
+    focusedWindowId,
     updateWindowPosition,
     updateWindowSize,
     focusWindow,
@@ -40,6 +41,7 @@ export const Window = ({
   const currentWindow = windows.find((w) => w.id === id);
   const toolbarItems = currentWindow?.toolbarItems;
   const isMaximized = currentWindow?.isMaximized;
+  const isActive = focusedWindowId === id;
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -141,6 +143,21 @@ export const Window = ({
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, dragOffset, id, updateWindowPosition]);
+
+  const handleWindowMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const isInteractive =
+      target.tagName === 'BUTTON' ||
+      target.tagName === 'INPUT' ||
+      target.tagName === 'A' ||
+      target.tagName === 'TEXTAREA' ||
+      target.tagName === 'SELECT' ||
+      target.closest('button, input, a, textarea, select, [role="button"]');
+
+    if (!isInteractive && !isActive) {
+      focusWindow(id);
+    }
+  };
 
   const handleTitleBarMouseDown = (e: React.MouseEvent) => {
     if (!windowRef.current || isMaximized) return;
@@ -289,7 +306,8 @@ export const Window = ({
   return (
     <div
       ref={windowRef}
-      className={styles.window}
+      className={`${styles.window} ${!isActive ? styles.inactive : ''}`}
+      data-window="true"
       style={{
         left: `${displayPosition.x}px`,
         top: `${displayPosition.y}px`,
@@ -297,6 +315,7 @@ export const Window = ({
         height: `${currentSize.height}px`,
         zIndex: zIndex,
       }}
+      onMouseDown={handleWindowMouseDown}
     >
       <TitleBar
         title={title}
@@ -305,6 +324,7 @@ export const Window = ({
         onMaximize={() => toggleMaximize(id)}
         onClose={() => closeWindow(id)}
         isMaximized={!!isMaximized}
+        isActive={isActive}
       />
       <div className={styles.content}>
         <Menubar />
