@@ -83,4 +83,84 @@ button {
     rgb(13, 141, 234) 63% 63%, rgb(13, 159, 241) 81%, rgb(15, 158, 237) 88%,
     rgb(17, 155, 233) 91%, rgb(19, 146, 226) 94%, rgb(19, 126, 215) 97%,
     rgb(9, 91, 201) 100%;
+
+  --xp-scrollbar-size: 17px;
+  --xp-scrollbar-thumb-bg: #c8d6fb;
+  --xp-scrollbar-thumb-shadow-left: inset -3px 0 #bad1fc;
+  --xp-scrollbar-thumb-shadow-right: inset 1px 1px #b7caf5;
+  --xp-scrollbar-border: 1px solid white;
+}
+
+::-webkit-scrollbar {
+  width: var(--xp-scrollbar-size);
+  height: var(--xp-scrollbar-size);
+}
+
+::-webkit-scrollbar-corner {
+  background: #dfdfdf;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track:vertical {
+  background-image: url('/assets/scrollbar/scroll-background.svg');
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background-image: url('/assets/scrollbar/scroll-background-horizontal.svg');
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--xp-scrollbar-thumb-bg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 7px;
+  border: var(--xp-scrollbar-border);
+  border-radius: 2px;
+  box-shadow: var(--xp-scrollbar-thumb-shadow-left),
+    var(--xp-scrollbar-thumb-shadow-right);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background-image: url('/assets/scrollbar/scroll-thumb.svg');
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-size: 8px;
+  background-image: url('/assets/scrollbar/scroll-thumb-horizontal.svg');
+}
+
+::-webkit-scrollbar-button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement,
+::-webkit-scrollbar-button:horizontal:start:increment,
+::-webkit-scrollbar-button:horizontal:end:decrement {
+  display: none;
+}
+
+::-webkit-scrollbar-button:vertical:decrement {
+  height: var(--xp-scrollbar-size);
+  background-image: url('/assets/scrollbar/scroll-arrow-up.svg');
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+  height: var(--xp-scrollbar-size);
+  background-image: url('/assets/scrollbar/scroll-arrow-down.svg');
+}
+
+::-webkit-scrollbar-button:horizontal:decrement {
+  width: var(--xp-scrollbar-size);
+  background-image: url('/assets/scrollbar/scroll-arrow-left.svg');
+}
+
+::-webkit-scrollbar-button:horizontal:increment {
+  width: var(--xp-scrollbar-size);
+  background-image: url('/assets/scrollbar/scroll-arrow-right.svg');
 }
