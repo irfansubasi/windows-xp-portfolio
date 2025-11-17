@@ -6,19 +6,21 @@ export const WindowManager = () => {
 
   return (
     <>
-      {windows.map((window) => (
-        <Window
-          key={window.id}
-          id={window.id}
-          title={window.title}
-          icon={window.icon}
-          position={window.position}
-          size={window.size}
-          zIndex={window.zIndex}
-        >
-          {window.content}
-        </Window>
-      ))}
+      {windows
+        .filter((window) => window.id !== 'webamp')
+        .map((window) => (
+          <Window
+            key={window.id}
+            id={window.id}
+            title={window.title}
+            icon={window.icon}
+            position={window.position}
+            size={window.size}
+            zIndex={window.zIndex}
+          >
+            {window.content}
+          </Window>
+        ))}
     </>
   );
 };

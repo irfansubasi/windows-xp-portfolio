@@ -47,6 +47,15 @@ const desktopIcons: DesktopIcon[] = [
     icon: '/assets/mail.png',
     windowContent: <ContactContent />,
   },
+  {
+    id: 'webamp',
+    name: 'Winamp',
+    icon: '/assets/winamp.png',
+    windowContent: null,
+    windowConfig: {
+      size: { width: 275, height: 116 },
+    },
+  },
 ];
 
 export const Desktop = () => {

@@ -22,7 +22,10 @@ export const WindowContent = ({
         (child.type as { displayName?: string; name?: string }).displayName ||
         (child.type as { name?: string }).name;
       if (componentName === 'ResumeContent') {
-        return cloneElement(child, { isZoomed, onZoomToggle } as any);
+        return cloneElement(child, {
+          isZoomed,
+          onZoomToggle,
+        } as { isZoomed?: boolean; onZoomToggle?: () => void });
       }
     }
     return child;
