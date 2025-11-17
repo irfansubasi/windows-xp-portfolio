@@ -12,7 +12,9 @@ export const Toolbar = ({ items }: ToolbarProps) => {
         {items.map((item, index) => (
           <div
             key={index}
-            className={styles.toolbarItem}
+            className={`${styles.toolbarItem} ${
+              item.isActive ? styles.active : ''
+            }`}
             onClick={item.disabled ? undefined : item.onClick}
           >
             <img

@@ -12,6 +12,7 @@ export interface ToolbarItem {
   label?: string;
   onClick?: () => void;
   disabled?: boolean;
+  isActive?: boolean;
 }
 
 export interface WindowData {

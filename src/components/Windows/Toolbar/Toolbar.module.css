@@ -17,6 +17,10 @@
   background-color: #f8f5e3;
 }
 
+.toolbarItem.active {
+  background-color: #c1bfb4;
+}
+
 .icon {
   width: 25px;
   height: 25px;

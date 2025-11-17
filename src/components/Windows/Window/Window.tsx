@@ -39,9 +39,39 @@ export const Window = ({
   } = useWindowContext();
 
   const currentWindow = windows.find((w) => w.id === id);
-  const toolbarItems = currentWindow?.toolbarItems;
   const isMaximized = currentWindow?.isMaximized;
   const isActive = focusedWindowId === id;
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleZoomToggle = () => {
+    setIsZoomed((prev) => !prev);
+  };
+
+  const handleSave = () => {
+    const link = document.createElement('a');
+    link.href = '/assets/cv/IrfanSubasiCV_ENG.pdf';
+    link.download = 'IrfanSubasiCV_ENG.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const toolbarItems = currentWindow?.toolbarItems?.map((item) => {
+    if (item.label === 'Zoom' && id === 'resume') {
+      return {
+        ...item,
+        onClick: handleZoomToggle,
+        isActive: isZoomed,
+      };
+    }
+    if (item.label === 'Save' && id === 'resume') {
+      return {
+        ...item,
+        onClick: handleSave,
+      };
+    }
+    return item;
+  });
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -330,7 +360,12 @@ export const Window = ({
         <Menubar />
         <Toolbar items={toolbarItems} />
         <AddressBar path={path} icon={icon} />
-        <WindowContent>{children}</WindowContent>
+        <WindowContent
+          isZoomed={id === 'resume' ? isZoomed : undefined}
+          onZoomToggle={id === 'resume' ? handleZoomToggle : undefined}
+        >
+          {children}
+        </WindowContent>
       </div>
       {resizeHandles.map((direction) => (
         <div
