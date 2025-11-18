@@ -52,4 +52,3 @@ export interface WindowContextType {
   toggleMaximize: (id: string) => void;
   toggleMinimize: (id: string) => void;
 }
-
