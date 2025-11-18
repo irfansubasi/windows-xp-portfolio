@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { motion, type MotionProps } from 'motion/react';
 import styles from './Window.module.css';
 import { TitleBar } from '../TitleBar/TitleBar';
 import { Menubar } from '../MenuBar/Menubar';
@@ -17,6 +18,7 @@ interface WindowProps {
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
+  motionProps?: Pick<MotionProps, 'initial' | 'animate' | 'transition'>;
 }
 
 export const Window = ({
@@ -27,6 +29,7 @@ export const Window = ({
   position: initialPosition,
   size: initialSize,
   zIndex,
+  motionProps,
 }: WindowProps) => {
   const {
     windows,
@@ -36,6 +39,7 @@ export const Window = ({
     focusWindow,
     closeWindow,
     toggleMaximize,
+    toggleMinimize,
   } = useWindowContext();
 
   const currentWindow = windows.find((w) => w.id === id);
@@ -334,16 +338,21 @@ export const Window = ({
   ];
 
   return (
-    <div
+    <motion.div
+      initial={motionProps?.initial}
+      animate={motionProps?.animate}
+      transition={motionProps?.transition}
       ref={windowRef}
       className={`${styles.window} ${!isActive ? styles.inactive : ''}`}
       data-window="true"
+      data-window-id={id}
       style={{
         left: `${displayPosition.x}px`,
         top: `${displayPosition.y}px`,
         width: `${currentSize.width}px`,
         height: `${currentSize.height}px`,
         zIndex: zIndex,
+        pointerEvents: currentWindow?.isMinimized ? 'none' : 'auto',
       }}
       onMouseDown={handleWindowMouseDown}
     >
@@ -351,6 +360,7 @@ export const Window = ({
         title={title}
         icon={icon}
         onMouseDown={handleTitleBarMouseDown}
+        onMinimize={() => toggleMinimize(id)}
         onMaximize={() => toggleMaximize(id)}
         onClose={() => closeWindow(id)}
         isMaximized={!!isMaximized}
@@ -375,6 +385,6 @@ export const Window = ({
           onMouseDown={(e) => handleResizeStart(e, direction)}
         />
       ))}
-    </div>
+    </motion.div>
   );
 };

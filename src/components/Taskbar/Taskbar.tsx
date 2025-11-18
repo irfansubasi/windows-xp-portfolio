@@ -10,7 +10,8 @@ const systemTrayItems = [
 ];
 
 export const Taskbar = () => {
-  const { windows, focusedWindowId, focusWindow } = useWindowContext();
+  const { windows, focusedWindowId, focusWindow, toggleMinimize } =
+    useWindowContext();
   const [time, setTime] = useState<string>('');
 
   useEffect(() => {
@@ -29,26 +30,47 @@ export const Taskbar = () => {
     <div className={styles.taskbar}>
       <div id={styles.startButton}></div>
       <div className={styles.bar}>
-        {sortedWindows.map((window) => (
-          <button
-            key={window.id}
-            className={`${styles['taskbar-button']} ${
-              focusedWindowId === window.id ? styles.active : ''
-            }`}
-            onClick={() => focusWindow(window.id)}
-          >
-            {window.icon && (
-              <img
-                src={window.icon}
-                alt=""
-                className={styles['taskbar-button-icon']}
-              />
-            )}
-            <span className={styles['taskbar-button-text']}>
-              {window.title}
-            </span>
-          </button>
-        ))}
+        {sortedWindows.map((window) => {
+          const isActive =
+            focusedWindowId === window.id && !window.isMinimized;
+
+          const handleClick = () => {
+            if (window.isMinimized) {
+              toggleMinimize(window.id);
+              focusWindow(window.id);
+              return;
+            }
+
+            if (focusedWindowId === window.id) {
+              toggleMinimize(window.id);
+              return;
+            }
+
+            focusWindow(window.id);
+          };
+
+          return (
+            <button
+              key={window.id}
+              className={`${styles['taskbar-button']} ${
+                isActive ? styles.active : ''
+              }`}
+              onClick={handleClick}
+              data-taskbar-button-id={window.id}
+            >
+              {window.icon && (
+                <img
+                  src={window.icon}
+                  alt=""
+                  className={styles['taskbar-button-icon']}
+                />
+              )}
+              <span className={styles['taskbar-button-text']}>
+                {window.title}
+              </span>
+            </button>
+          );
+        })}
       </div>
       <div className={styles['system-tray']}>
         {systemTrayItems.map((item) => (

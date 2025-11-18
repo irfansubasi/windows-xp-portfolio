@@ -53,6 +53,7 @@ interface WindowContextType {
     size: { width: number; height: number }
   ) => void;
   toggleMaximize: (id: string) => void;
+  toggleMinimize: (id: string) => void;
 }
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
@@ -247,6 +248,43 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
     });
   }, []);
 
+  const toggleMinimize = useCallback(
+    (id: string) => {
+      let nextFocusedId: string | null = focusedWindowId;
+      let didUpdate = false;
+
+      setWindows((prev) => {
+        const updated = prev.map((w) => {
+          if (w.id !== id) return w;
+
+          didUpdate = true;
+          const nextIsMinimized = !w.isMinimized;
+
+          if (nextIsMinimized) {
+            if (nextFocusedId === id) {
+              nextFocusedId = null;
+            }
+          } else {
+            nextFocusedId = id;
+          }
+
+          return { ...w, isMinimized: nextIsMinimized };
+        });
+
+        if (!didUpdate) {
+          return prev;
+        }
+
+        return recalculateZIndexes(updated, nextFocusedId ?? undefined);
+      });
+
+      if (didUpdate) {
+        setFocusedWindowId(nextFocusedId);
+      }
+    },
+    [focusedWindowId]
+  );
+
   return (
     <WindowContext.Provider
       value={{
@@ -258,6 +296,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
         updateWindowPosition,
         updateWindowSize,
         toggleMaximize,
+        toggleMinimize,
       }}
     >
       {children}
