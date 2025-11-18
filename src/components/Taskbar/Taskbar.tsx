@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Taskbar.module.css';
 import { format } from 'date-fns';
-import { useWindowContext } from '../../context/WindowContext';
+import { useWindowContext } from '../../context/useWindowContext';
 
 const systemTrayItems = [
   { id: 'fullscreen', name: 'Fullscreen', icon: '/assets/fullscreen.png' },

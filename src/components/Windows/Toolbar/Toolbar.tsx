@@ -1,5 +1,5 @@
 import styles from './Toolbar.module.css';
-import type { ToolbarItem } from '../../../context/WindowContext';
+import type { ToolbarItem } from '../../../context/windowTypes';
 
 interface ToolbarProps {
   items?: ToolbarItem[];

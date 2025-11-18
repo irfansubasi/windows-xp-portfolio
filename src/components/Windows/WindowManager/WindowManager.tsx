@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useWindowContext } from '../../../context/WindowContext';
+import { useWindowContext } from '../../../context/useWindowContext';
 import { Window } from '../Window/Window';
 
 interface MinimizeTarget {

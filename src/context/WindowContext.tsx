@@ -1,70 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useRef,
-  type ReactNode,
-} from 'react';
-
-export interface ToolbarItem {
-  icon: string;
-  label?: string;
-  onClick?: () => void;
-  disabled?: boolean;
-  isActive?: boolean;
-}
-
-export interface WindowData {
-  id: string;
-  title: string;
-  icon: string;
-  content: ReactNode;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-  zIndex: number;
-  order: number;
-  isMinimized?: boolean;
-  isMaximized?: boolean;
-  toolbarItems?: ToolbarItem[];
-  previousPosition?: { x: number; y: number };
-  previousSize?: { width: number; height: number };
-}
-
-interface WindowContextType {
-  windows: WindowData[];
-  focusedWindowId: string | null;
-  openWindow: (
-    id: string,
-    title: string,
-    icon: string,
-    content: ReactNode,
-    size?: { width: number; height: number },
-    toolbarItems?: ToolbarItem[]
-  ) => void;
-  closeWindow: (id: string) => void;
-  focusWindow: (id: string | null) => void;
-  updateWindowPosition: (
-    id: string,
-    position: { x: number; y: number }
-  ) => void;
-  updateWindowSize: (
-    id: string,
-    size: { width: number; height: number }
-  ) => void;
-  toggleMaximize: (id: string) => void;
-  toggleMinimize: (id: string) => void;
-}
-
-const WindowContext = createContext<WindowContextType | undefined>(undefined);
-
-export const useWindowContext = () => {
-  const context = useContext(WindowContext);
-  if (!context) {
-    throw new Error('useWindowContext must be used within WindowProvider');
-  }
-  return context;
-};
+import { useState, useCallback, useRef, type ReactNode } from 'react';
+import type { ToolbarItem, WindowData } from './windowTypes';
+import { WindowContext } from './WindowContextBase';
 
 interface WindowProviderProps {
   children: ReactNode;
@@ -131,7 +67,10 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
       icon: string,
       content: ReactNode,
       customSize?: { width: number; height: number },
-      toolbarItems?: ToolbarItem[]
+      toolbarItems?: ToolbarItem[],
+      options?: {
+        hideAddressBar?: boolean;
+      }
     ) => {
       setWindows((prev) => {
         const existing = prev.find((w) => w.id === id);
@@ -158,6 +97,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           isMinimized: false,
           isMaximized: false,
           toolbarItems,
+          hideAddressBar: options?.hideAddressBar,
           previousPosition: undefined,
           previousSize: undefined,
         };

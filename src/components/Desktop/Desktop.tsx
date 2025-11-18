@@ -3,13 +3,13 @@ import styles from './Desktop.module.css';
 import { ResumeContent } from '../Windows/WindowContent/ResumeContent';
 import { AboutMeContent } from '../Windows/WindowContent/AboutMeContent';
 import { ContactContent } from '../Windows/WindowContent/ContactContent';
-import { useWindowContext } from '../../context/WindowContext';
-
-import type { ToolbarItem } from '../../context/WindowContext';
+import { useWindowContext } from '../../context/useWindowContext';
+import type { ToolbarItem } from '../../context/windowTypes';
 
 interface WindowConfig {
   size?: { width: number; height: number };
   toolbarItems?: ToolbarItem[];
+  hideAddressBar?: boolean;
 }
 
 interface DesktopIcon {
@@ -46,6 +46,10 @@ const desktopIcons: DesktopIcon[] = [
     name: 'Contact Me',
     icon: '/assets/mail.png',
     windowContent: <ContactContent />,
+    windowConfig: {
+      hideAddressBar: true,
+      toolbarItems: [{ icon: '/assets/send.png', label: 'Send' }],
+    },
   },
   {
     id: 'webamp',
@@ -166,7 +170,10 @@ export const Desktop = () => {
                   icon.icon,
                   icon.windowContent,
                   icon.windowConfig?.size,
-                  icon.windowConfig?.toolbarItems
+                  icon.windowConfig?.toolbarItems,
+                  {
+                    hideAddressBar: icon.windowConfig?.hideAddressBar,
+                  }
                 );
               }}
             >

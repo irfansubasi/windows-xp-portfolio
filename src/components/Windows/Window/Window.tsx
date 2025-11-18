@@ -5,7 +5,7 @@ import { TitleBar } from '../TitleBar/TitleBar';
 import { Menubar } from '../MenuBar/Menubar';
 import { Toolbar } from '../Toolbar/Toolbar';
 import { AddressBar } from '../AddressBar/AddressBar';
-import { useWindowContext } from '../../../context/WindowContext';
+import { useWindowContext } from '../../../context/useWindowContext';
 import { WindowContent } from '../WindowContent/WindowContent';
 
 type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
@@ -369,7 +369,9 @@ export const Window = ({
       <div className={styles.content}>
         <Menubar />
         <Toolbar items={toolbarItems} />
-        <AddressBar path={path} icon={icon} />
+        {!currentWindow?.hideAddressBar && (
+          <AddressBar path={path} icon={icon} />
+        )}
         <WindowContent
           isZoomed={id === 'resume' ? isZoomed : undefined}
           onZoomToggle={id === 'resume' ? handleZoomToggle : undefined}

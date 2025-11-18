@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useWindowContext } from '../../context/WindowContext';
+import { useWindowContext } from '../../context/useWindowContext';
 import { WebampPlayer, disposeWebamp } from './Webamp';
 
 export const WebampManager = () => {
