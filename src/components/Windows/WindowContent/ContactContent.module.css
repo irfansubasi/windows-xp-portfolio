@@ -1,0 +1,68 @@
+.contactWindow {
+  width: 100%;
+  height: 100%;
+  background: #f4f1e3;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #000000;
+  font-size: 12px;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+label {
+  width: 60px;
+  text-align: right;
+  color: #000000;
+}
+
+input {
+  flex: 1;
+  padding: 5px 8px;
+  color: #000000;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #f0f0f0,
+    inset 0 0 3px 1px #d6d6d6;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+input:disabled {
+  background: #cfccbe;
+  box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #cfcfcf,
+    inset 0 0 3px 1px #d6d6d6;
+}
+
+.messageArea {
+  flex: 1;
+  padding: 5px 8px;
+  color: #000000;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #f0f0f0,
+    inset 0 0 3px 1px #d6d6d6;
+  font-family: inherit;
+  font-size: 12px;
+  resize: none;
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}

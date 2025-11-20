@@ -3,8 +3,8 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   -webkit-font-smoothing: antialiased;
-  min-width: 500px;
-  min-height: 400px;
+  min-width: 400px;
+  min-height: 300px;
   z-index: 12;
   color: #0f172a;
   user-select: none;

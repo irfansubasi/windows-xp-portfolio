@@ -60,6 +60,18 @@ export const Window = ({
     document.body.removeChild(link);
   };
 
+  const handleContactSend = (payload: { subject: string; body: string }) => {
+    const params = new URLSearchParams({
+      to: 'irfannsubasi@gmail.com',
+      su: payload.subject,
+      body: payload.body,
+    });
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`,
+      '_blank'
+    );
+  };
+
   const toolbarItems = currentWindow?.toolbarItems?.map((item) => {
     if (item.label === 'Zoom' && id === 'resume') {
       return {
@@ -74,7 +86,20 @@ export const Window = ({
         onClick: handleSave,
       };
     }
+    if (item.label === 'Send' && id === 'contact') {
+      return {
+        ...item,
+        onClick: () => handleContactSend(contactLastPayload.current),
+      };
+    }
     return item;
+  });
+  const contactLastPayload = useRef<{
+    subject: string;
+    body: string;
+  }>({
+    subject: '',
+    body: '',
   });
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
@@ -91,6 +116,8 @@ export const Window = ({
     height: 0,
     left: 0,
     top: 0,
+    minWidth: 0,
+    minHeight: 0,
   });
   const lastSizeRef = useRef(initialSize);
 
@@ -215,6 +242,7 @@ export const Window = ({
 
     focusWindow(id);
     const rect = windowRef.current.getBoundingClientRect();
+    const computedStyle = window.getComputedStyle(windowRef.current);
     setIsResizing(true);
     setResizeDirection(direction);
     resizeStartRef.current = {
@@ -224,6 +252,8 @@ export const Window = ({
       height: rect.height,
       left: lastPositionRef.current.x,
       top: lastPositionRef.current.y,
+      minWidth: parseFloat(computedStyle.minWidth) || 0,
+      minHeight: parseFloat(computedStyle.minHeight) || 0,
     };
   };
 
@@ -237,6 +267,8 @@ export const Window = ({
           height: startHeight,
           left: startLeft,
           top: startTop,
+          minWidth,
+          minHeight,
         } = resizeStartRef.current;
 
         const deltaX = e.clientX - startX;
@@ -251,17 +283,14 @@ export const Window = ({
         let newX = startLeft;
         let newY = startTop;
 
-        const MIN_WIDTH = 500;
-        const MIN_HEIGHT = 400;
-
         if (resizeDirection.includes('e')) {
           newWidth = Math.max(
-            MIN_WIDTH,
+            minWidth,
             Math.min(startWidth + deltaX, viewportWidth - startLeft)
           );
         }
         if (resizeDirection.includes('w')) {
-          newWidth = Math.max(MIN_WIDTH, startWidth - deltaX);
+          newWidth = Math.max(minWidth, startWidth - deltaX);
           newX = startLeft + (startWidth - newWidth);
           newX = Math.max(0, newX);
           if (newX === 0) {
@@ -270,7 +299,7 @@ export const Window = ({
         }
         if (resizeDirection.includes('s')) {
           newHeight = Math.max(
-            MIN_HEIGHT,
+            minHeight,
             Math.min(
               startHeight + deltaY,
               viewportHeight - startTop - TASKBAR_HEIGHT
@@ -278,7 +307,7 @@ export const Window = ({
           );
         }
         if (resizeDirection.includes('n')) {
-          newHeight = Math.max(MIN_HEIGHT, startHeight - deltaY);
+          newHeight = Math.max(minHeight, startHeight - deltaY);
           newY = startTop + (startHeight - newHeight);
           newY = Math.max(0, newY);
           if (newY === 0) {
@@ -375,6 +404,13 @@ export const Window = ({
         <WindowContent
           isZoomed={id === 'resume' ? isZoomed : undefined}
           onZoomToggle={id === 'resume' ? handleZoomToggle : undefined}
+          onContactSend={
+            id === 'contact'
+              ? (payload) => {
+                  contactLastPayload.current = payload;
+                }
+              : undefined
+          }
         >
           {children}
         </WindowContent>

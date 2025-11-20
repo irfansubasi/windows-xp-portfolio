@@ -49,6 +49,7 @@ const desktopIcons: DesktopIcon[] = [
     windowConfig: {
       hideAddressBar: true,
       toolbarItems: [{ icon: '/assets/send.png', label: 'Send' }],
+      size: { width: 500, height: 350 },
     },
   },
   {
