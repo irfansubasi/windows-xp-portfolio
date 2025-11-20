@@ -16,12 +16,22 @@ export const ContactContent = ({ onSend }: ContactContentProps) => {
   return (
     <div className={styles.contactWindow}>
       <div className={styles.formRow}>
-        <label htmlFor="contact-to">To:</label>
-        <input id="contact-to" value="irfannsubasi@gmail.com" disabled />
+        <label htmlFor="contact-to" className={styles.label}>
+          To:
+        </label>
+        <input
+          id="contact-to"
+          className={styles.input}
+          value="irfannsubasi@gmail.com"
+          disabled
+        />
       </div>
       <div className={styles.formRow}>
-        <label htmlFor="contact-subject">Subject:</label>
+        <label htmlFor="contact-subject" className={styles.label}>
+          Subject:
+        </label>
         <input
+          className={styles.input}
           id="contact-subject"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}

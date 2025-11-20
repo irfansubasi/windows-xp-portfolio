@@ -16,13 +16,13 @@
   gap: 8px;
 }
 
-label {
+.label {
   width: 60px;
   text-align: right;
   color: #000000;
 }
 
-input {
+.input {
   flex: 1;
   padding: 5px 8px;
   color: #000000;
@@ -34,15 +34,15 @@ input {
   font-family: inherit;
 }
 
-input:focus {
+.input:focus {
   outline: none;
 }
 
-input:focus-visible {
+.input:focus-visible {
   outline: none;
 }
 
-input:disabled {
+.input:disabled {
   background: #cfccbe;
   box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #cfcfcf,
     inset 0 0 3px 1px #d6d6d6;
