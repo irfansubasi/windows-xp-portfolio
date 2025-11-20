@@ -7,6 +7,7 @@ import { Toolbar } from '../Toolbar/Toolbar';
 import { AddressBar } from '../AddressBar/AddressBar';
 import { useWindowContext } from '../../../context/useWindowContext';
 import { WindowContent } from '../WindowContent/WindowContent';
+import { getWindowDefinition } from '../../../config/windowDefinitions';
 
 type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
@@ -40,6 +41,7 @@ export const Window = ({
     closeWindow,
     toggleMaximize,
     toggleMinimize,
+    openWindow,
   } = useWindowContext();
 
   const currentWindow = windows.find((w) => w.id === id);
@@ -72,6 +74,48 @@ export const Window = ({
     );
   };
 
+  const handleSocialClick = (label: string) => {
+    if (label === 'LinkedIn') {
+      window.open('https://www.linkedin.com/in/irfansubasi/', '_blank');
+    } else if (label === 'GitHub') {
+      window.open('https://github.com/irfansubasi/', '_blank');
+    }
+  };
+
+  const handleResumeClick = () => {
+    const resumeDefinition = getWindowDefinition('resume');
+    if (!resumeDefinition) return;
+
+    openWindow(
+      resumeDefinition.id,
+      resumeDefinition.name,
+      resumeDefinition.icon,
+      resumeDefinition.windowContent,
+      resumeDefinition.windowConfig?.size,
+      resumeDefinition.windowConfig?.toolbarItems,
+      {
+        hideAddressBar: resumeDefinition.windowConfig?.hideAddressBar,
+      }
+    );
+  };
+
+  const handleContactClick = () => {
+    const contactDefinition = getWindowDefinition('contact');
+    if (!contactDefinition) return;
+
+    openWindow(
+      contactDefinition.id,
+      contactDefinition.name,
+      contactDefinition.icon,
+      contactDefinition.windowContent,
+      contactDefinition.windowConfig?.size,
+      contactDefinition.windowConfig?.toolbarItems,
+      {
+        hideAddressBar: contactDefinition.windowConfig?.hideAddressBar,
+      }
+    );
+  };
+
   const toolbarItems = currentWindow?.toolbarItems?.map((item) => {
     if (item.label === 'Zoom' && id === 'resume') {
       return {
@@ -86,10 +130,34 @@ export const Window = ({
         onClick: handleSave,
       };
     }
+    if (item.label === 'Contact Me' && id === 'resume') {
+      return {
+        ...item,
+        onClick: handleContactClick,
+      };
+    }
     if (item.label === 'Send' && id === 'contact') {
       return {
         ...item,
         onClick: () => handleContactSend(contactLastPayload.current),
+      };
+    }
+    if (id === 'aboutme' && item.label === 'LinkedIn') {
+      return {
+        ...item,
+        onClick: () => handleSocialClick('LinkedIn'),
+      };
+    }
+    if (id === 'aboutme' && item.label === 'GitHub') {
+      return {
+        ...item,
+        onClick: () => handleSocialClick('GitHub'),
+      };
+    }
+    if (id === 'aboutme' && item.label === 'Resume') {
+      return {
+        ...item,
+        onClick: handleResumeClick,
       };
     }
     return item;

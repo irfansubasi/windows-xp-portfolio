@@ -1,0 +1,45 @@
+.content {
+  background: #4f61da;
+  width: 100%;
+  color: #ffffff;
+  font-family: Tahoma, sans-serif;
+  text-shadow: 1px 1px 0 #000, 0 0 1px #000;
+  font-weight: bold;
+}
+
+.contentInner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  text-align: justify;
+}
+
+h2 {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 15px;
+}
+
+.contentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.contentBody p {
+  font-size: 15px;
+  line-height: 1.5;
+  width: 80%;
+}
+
+.contentBody p:nth-of-type(2),
+.contentBody p:nth-of-type(4) {
+  align-self: flex-end;
+}

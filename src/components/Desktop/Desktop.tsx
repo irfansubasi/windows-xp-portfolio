@@ -1,67 +1,7 @@
-import React, { useState, useEffect, useRef, type ReactNode } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './Desktop.module.css';
-import { ResumeContent } from '../Windows/WindowContent/ResumeContent';
-import { AboutMeContent } from '../Windows/WindowContent/AboutMeContent';
-import { ContactContent } from '../Windows/WindowContent/ContactContent';
 import { useWindowContext } from '../../context/useWindowContext';
-import type { ToolbarItem } from '../../context/windowTypes';
-
-interface WindowConfig {
-  size?: { width: number; height: number };
-  toolbarItems?: ToolbarItem[];
-  hideAddressBar?: boolean;
-}
-
-interface DesktopIcon {
-  id: string;
-  name: string;
-  icon: string;
-  windowContent: ReactNode;
-  windowConfig?: WindowConfig;
-}
-
-const desktopIcons: DesktopIcon[] = [
-  {
-    id: 'resume',
-    name: 'Resume',
-    icon: '/assets/PDF.ico',
-    windowContent: <ResumeContent />,
-    windowConfig: {
-      size: { width: 700, height: 800 },
-      toolbarItems: [
-        { icon: '/assets/Search.png', label: 'Zoom' },
-        { icon: '/assets/Save.png', label: 'Save' },
-        { icon: '/assets/mail.png', label: 'Contact Me' },
-      ],
-    },
-  },
-  {
-    id: 'aboutme',
-    name: 'About Me',
-    icon: '/assets/Information.png',
-    windowContent: <AboutMeContent />,
-  },
-  {
-    id: 'contact',
-    name: 'Contact Me',
-    icon: '/assets/mail.png',
-    windowContent: <ContactContent />,
-    windowConfig: {
-      hideAddressBar: true,
-      toolbarItems: [{ icon: '/assets/send.png', label: 'Send' }],
-      size: { width: 500, height: 350 },
-    },
-  },
-  {
-    id: 'webamp',
-    name: 'Winamp',
-    icon: '/assets/winamp.png',
-    windowContent: null,
-    windowConfig: {
-      size: { width: 275, height: 116 },
-    },
-  },
-];
+import { desktopIcons } from '../../config/windowDefinitions';
 
 export const Desktop = () => {
   const { openWindow, focusWindow } = useWindowContext();
