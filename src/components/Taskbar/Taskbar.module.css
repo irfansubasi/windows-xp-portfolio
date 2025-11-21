@@ -124,6 +124,7 @@
 
 .volume-slider {
   -webkit-appearance: none;
+  appearance: none;
   width: 3px;
   height: 80px;
   writing-mode: vertical-lr;
