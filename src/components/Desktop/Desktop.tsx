@@ -114,6 +114,8 @@ export const Desktop = () => {
                   icon.windowConfig?.toolbarItems,
                   {
                     hideAddressBar: icon.windowConfig?.hideAddressBar,
+                    hideToolbar: icon.windowConfig?.hideToolbar,
+                    hideMenubar: icon.windowConfig?.hideMenubar,
                   }
                 );
               }}

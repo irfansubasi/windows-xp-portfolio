@@ -21,6 +21,8 @@ export interface WindowData {
   isMaximized?: boolean;
   toolbarItems?: ToolbarItem[];
   hideAddressBar?: boolean;
+  hideToolbar?: boolean;
+  hideMenubar?: boolean;
   previousPosition?: { x: number; y: number };
   previousSize?: { width: number; height: number };
 }
@@ -37,6 +39,8 @@ export interface WindowContextType {
     toolbarItems?: ToolbarItem[],
     options?: {
       hideAddressBar?: boolean;
+      hideToolbar?: boolean;
+      hideMenubar?: boolean;
     }
   ) => void;
   closeWindow: (id: string) => void;

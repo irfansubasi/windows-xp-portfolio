@@ -95,6 +95,8 @@ export const Window = ({
       resumeDefinition.windowConfig?.toolbarItems,
       {
         hideAddressBar: resumeDefinition.windowConfig?.hideAddressBar,
+        hideToolbar: resumeDefinition.windowConfig?.hideToolbar,
+        hideMenubar: resumeDefinition.windowConfig?.hideMenubar,
       }
     );
   };
@@ -112,6 +114,8 @@ export const Window = ({
       contactDefinition.windowConfig?.toolbarItems,
       {
         hideAddressBar: contactDefinition.windowConfig?.hideAddressBar,
+        hideToolbar: contactDefinition.windowConfig?.hideToolbar,
+        hideMenubar: contactDefinition.windowConfig?.hideMenubar,
       }
     );
   };
@@ -464,11 +468,12 @@ export const Window = ({
         isActive={isActive}
       />
       <div className={styles.content}>
-        <Menubar />
-        <Toolbar items={toolbarItems} />
+        {!currentWindow?.hideMenubar && <Menubar />}
+        {!currentWindow?.hideToolbar && <Toolbar items={toolbarItems} />}
         {!currentWindow?.hideAddressBar && (
           <AddressBar path={path} icon={icon} />
         )}
+
         <WindowContent
           isZoomed={id === 'resume' ? isZoomed : undefined}
           onZoomToggle={id === 'resume' ? handleZoomToggle : undefined}

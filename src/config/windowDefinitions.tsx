@@ -3,11 +3,14 @@ import type { ToolbarItem } from '../context/windowTypes';
 import { ResumeContent } from '../components/Windows/WindowContent/ResumeContent';
 import { AboutMeContent } from '../components/Windows/WindowContent/AboutMeContent';
 import { ContactContent } from '../components/Windows/WindowContent/ContactContent';
+import { PaintContent } from '../components/Windows/WindowContent/PaintContent';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
   toolbarItems?: ToolbarItem[];
   hideAddressBar?: boolean;
+  hideToolbar?: boolean;
+  hideMenubar?: boolean;
 }
 
 export interface WindowDefinition {
@@ -66,6 +69,18 @@ const definitions: WindowDefinition[] = [
     windowContent: null,
     windowConfig: {
       size: { width: 275, height: 116 },
+    },
+  },
+  {
+    id: 'paint',
+    name: 'Paint',
+    icon: '/assets/Paint.png',
+    windowContent: <PaintContent />,
+    windowConfig: {
+      size: { width: 800, height: 600 },
+      hideAddressBar: true,
+      hideToolbar: true,
+      hideMenubar: true,
     },
   },
 ];
