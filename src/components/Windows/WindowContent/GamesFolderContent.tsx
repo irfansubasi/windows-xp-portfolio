@@ -1,44 +1,16 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import styles from './GamesFolderContent.module.css';
 import { useSelection } from '../../../hooks/useSelection';
-
-interface Game {
-  id: string;
-  name: string;
-  icon: string;
-  onClick: () => void;
-}
-
-const games: Game[] = [
-  {
-    id: 'dxBall',
-    name: 'DX Ball',
-    icon: '/assets/dxball.webp',
-    onClick: () => {},
-  },
-  {
-    id: 'quake',
-    name: 'Quake III',
-    icon: '/assets/quake.png',
-    onClick: () => {},
-  },
-  {
-    id: 'pinball',
-    name: 'Pinball',
-    icon: '/assets/pinball.webp',
-    onClick: () => {},
-  },
-  {
-    id: 'doom',
-    name: 'Doom',
-    icon: '/assets/doom.ico',
-    onClick: () => {},
-  },
-];
+import { getWindowDefinition } from '../../../config/windowDefinitions';
+import { useWindowContext } from '../../../context/useWindowContext';
+import { getGameList, type GameInfo } from '../../../config/gameDefinitions';
 
 export const GamesFolderContent = () => {
+  const { openWindow } = useWindowContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const gameRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const games: GameInfo[] = useMemo(() => getGameList(), []);
 
   const {
     selectedIds,
@@ -53,7 +25,22 @@ export const GamesFolderContent = () => {
     containerRef,
     itemRefs: gameRefs,
     onItemDoubleClick: (game) => {
-      game.onClick();
+      const gameDefinition = getWindowDefinition(game.id);
+      if (!gameDefinition) return;
+
+      openWindow(
+        gameDefinition.id,
+        gameDefinition.name,
+        gameDefinition.icon,
+        gameDefinition.windowContent,
+        gameDefinition.windowConfig?.size,
+        gameDefinition.windowConfig?.toolbarItems,
+        {
+          hideAddressBar: gameDefinition.windowConfig?.hideAddressBar,
+          hideToolbar: gameDefinition.windowConfig?.hideToolbar,
+          hideMenubar: gameDefinition.windowConfig?.hideMenubar,
+        }
+      );
     },
   });
 
