@@ -1,3 +1,4 @@
+import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
 import type { WindowDefinition } from './windowDefinitions';
 
 export const gameDefinitions: WindowDefinition[] = [
@@ -29,7 +30,7 @@ export const gameDefinitions: WindowDefinition[] = [
     id: 'quake',
     name: 'Quake',
     icon: '/assets/games/Quake/quake.png',
-    windowContent: null,
+    windowContent: <QuakeGameContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
       hideAddressBar: true,
