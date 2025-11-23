@@ -4,6 +4,7 @@ import { ResumeContent } from '../components/Windows/WindowContent/ResumeContent
 import { AboutMeContent } from '../components/Windows/WindowContent/AboutMeContent';
 import { ContactContent } from '../components/Windows/WindowContent/ContactContent';
 import { PaintContent } from '../components/Windows/WindowContent/PaintContent';
+import { GamesFolderContent } from '../components/Windows/WindowContent/GamesFolderContent';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
@@ -81,6 +82,15 @@ const definitions: WindowDefinition[] = [
       hideAddressBar: true,
       hideToolbar: true,
       hideMenubar: true,
+    },
+  },
+  {
+    id: 'gamesFolder',
+    name: 'Games',
+    icon: '/assets/folder.png',
+    windowContent: <GamesFolderContent />,
+    windowConfig: {
+      size: { width: 600, height: 400 },
     },
   },
 ];
