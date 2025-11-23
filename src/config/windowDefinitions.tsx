@@ -5,6 +5,7 @@ import { AboutMeContent } from '../components/Windows/WindowContent/AboutMeConte
 import { ContactContent } from '../components/Windows/WindowContent/ContactContent';
 import { PaintContent } from '../components/Windows/WindowContent/PaintContent';
 import { GamesFolderContent } from '../components/Windows/WindowContent/GamesFolderContent';
+import { gameDefinitions } from './gameDefinitions';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
@@ -95,7 +96,9 @@ const definitions: WindowDefinition[] = [
   },
 ];
 
+const allDefinitions = [...definitions, ...gameDefinitions];
+
 export const desktopIcons = definitions;
 
 export const getWindowDefinition = (id: string) =>
-  definitions.find((definition) => definition.id === id);
+  allDefinitions.find((definition) => definition.id === id);
