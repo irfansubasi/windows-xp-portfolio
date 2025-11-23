@@ -1,87 +1,47 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import styles from './Desktop.module.css';
 import { useWindowContext } from '../../context/useWindowContext';
 import { desktopIcons } from '../../config/windowDefinitions';
+import { useSelection } from '../../hooks/useSelection';
 
 export const Desktop = () => {
   const { openWindow, focusWindow } = useWindowContext();
-  const [icons] = useState(desktopIcons);
-  const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
-
   const desktopRef = useRef<HTMLDivElement>(null);
   const iconRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      if (!isSelecting || !desktopRef.current) return;
-      const rect = desktopRef.current.getBoundingClientRect();
-      setCurrentPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  const {
+    selectedIds,
+    isSelecting,
+    startPos,
+    currentPos,
+    handleMouseDown,
+    handleItemClick,
+    handleItemDoubleClick,
+  } = useSelection({
+    items: desktopIcons,
+    containerRef: desktopRef,
+    itemRefs: iconRefs,
+    excludeSelector: '[data-window]',
+    onItemDoubleClick: (icon) => {
+      openWindow(
+        icon.id,
+        icon.name,
+        icon.icon,
+        icon.windowContent,
+        icon.windowConfig?.size,
+        icon.windowConfig?.toolbarItems,
+        {
+          hideAddressBar: icon.windowConfig?.hideAddressBar,
+          hideToolbar: icon.windowConfig?.hideToolbar,
+          hideMenubar: icon.windowConfig?.hideMenubar,
+        }
+      );
+    },
+  });
 
-      const selection = {
-        left: Math.min(startPos.x, e.clientX - rect.left),
-        top: Math.min(startPos.y, e.clientY - rect.top),
-        right: Math.max(startPos.x, e.clientX - rect.left),
-        bottom: Math.max(startPos.y, e.clientY - rect.top),
-      };
-
-      const nextSelected: string[] = [];
-
-      icons.forEach((icon) => {
-        const el = iconRefs.current[icon.id];
-        if (!el) return;
-
-        const iconRect = el.getBoundingClientRect();
-
-        const box = {
-          left: iconRect.left - rect.left,
-          top: iconRect.top - rect.top,
-          right: iconRect.right - rect.left,
-          bottom: iconRect.bottom - rect.top,
-        };
-
-        const intersects = !(
-          selection.right < box.left ||
-          selection.left > box.right ||
-          selection.bottom < box.top ||
-          selection.top > box.bottom
-        );
-
-        if (intersects) nextSelected.push(icon.id);
-      });
-
-      setSelectedIcons(nextSelected);
-    };
-
-    const handleUp = () => setIsSelecting(false);
-
-    if (isSelecting) {
-      document.addEventListener('mousemove', handleMove);
-      document.addEventListener('mouseup', handleUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('mouseup', handleUp);
-    };
-  }, [isSelecting, startPos, icons]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const rect = desktopRef.current?.getBoundingClientRect();
-    if (!desktopRef.current || !rect) return;
-
-    const isIcon = (e.target as HTMLElement).closest(`.${styles.icon}`);
-    const isWindow = (e.target as HTMLElement).closest('[data-window]');
-
-    if (!isIcon && !isWindow) {
-      focusWindow(null);
-      setSelectedIcons([]);
-      setIsSelecting(true);
-      setStartPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-      setCurrentPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    }
+  const handleDesktopMouseDown = (e: React.MouseEvent) => {
+    handleMouseDown(e);
+    focusWindow(null);
   };
 
   return (
@@ -89,36 +49,19 @@ export const Desktop = () => {
       <div
         ref={desktopRef}
         className={styles['without-taskbar']}
-        onMouseDown={handleMouseDown}
+        onMouseDown={handleDesktopMouseDown}
       >
         <div className={styles['icons-container']}>
-          {icons.map((icon) => (
+          {desktopIcons.map((icon) => (
             <div
               key={icon.id}
               ref={(el) => {
                 iconRefs.current[icon.id] = el;
               }}
+              data-selectable-item
               className={styles.icon}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedIcons([icon.id]);
-              }}
-              onDoubleClick={(e) => {
-                e.stopPropagation();
-                openWindow(
-                  icon.id,
-                  icon.name,
-                  icon.icon,
-                  icon.windowContent,
-                  icon.windowConfig?.size,
-                  icon.windowConfig?.toolbarItems,
-                  {
-                    hideAddressBar: icon.windowConfig?.hideAddressBar,
-                    hideToolbar: icon.windowConfig?.hideToolbar,
-                    hideMenubar: icon.windowConfig?.hideMenubar,
-                  }
-                );
-              }}
+              onClick={(e) => handleItemClick(e, icon.id)}
+              onDoubleClick={(e) => handleItemDoubleClick(e, icon)}
             >
               <img
                 src={icon.icon}
@@ -128,7 +71,7 @@ export const Desktop = () => {
               />
               <span
                 className={`${styles['icon-name']} ${
-                  selectedIcons.includes(icon.id) ? styles.selected : ''
+                  selectedIds.includes(icon.id) ? styles.selected : ''
                 }`}
               >
                 {icon.name}
