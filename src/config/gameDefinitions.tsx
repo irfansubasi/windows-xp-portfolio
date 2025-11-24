@@ -1,4 +1,5 @@
 import DoomGameContent from '../components/Windows/WindowContent/Games/DoomGameContent';
+import PinballGameContent from '../components/Windows/WindowContent/Games/PinballGameContent';
 import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
 import type { WindowDefinition } from './windowDefinitions';
 
@@ -43,7 +44,7 @@ export const gameDefinitions: WindowDefinition[] = [
     id: 'pinball',
     name: 'Pinball',
     icon: '/assets/games/Pinball/pinball.webp',
-    windowContent: null,
+    windowContent: <PinballGameContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
       hideAddressBar: true,
