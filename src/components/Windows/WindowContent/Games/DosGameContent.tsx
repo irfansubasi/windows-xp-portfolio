@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window {
-    Dos: (element: HTMLElement, options: { url: string }) => any;
+    Dos: (
+      element: HTMLElement,
+      options: { url: string; autoStart: boolean }
+    ) => any;
   }
 }
 
@@ -32,6 +35,7 @@ export const DosGameContent = ({ gameUrl }: DosGameContentProps) => {
 
     const dosInstance = window.Dos(dosRef.current, {
       url: gameUrl,
+      autoStart: true,
     });
 
     return () => {
