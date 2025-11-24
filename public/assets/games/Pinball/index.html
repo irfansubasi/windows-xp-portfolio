@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>3D Pinball for Windows - Space Cadet</title>
+    <style>
+      :root {
+        --ActiveBorder: rgb(212, 208, 200);
+        --ActiveTitle: rgb(10, 36, 106);
+        --AppWorkspace: rgb(128, 128, 128);
+        --Background: rgb(58, 110, 165);
+        --ButtonAlternateFace: rgb(192, 192, 192);
+        --ButtonDkShadow: rgb(64, 64, 64);
+        --ButtonFace: rgb(212, 208, 200);
+        --ButtonHilight: rgb(255, 255, 255);
+        --ButtonLight: rgb(212, 208, 200);
+        --ButtonShadow: rgb(128, 128, 128);
+        --ButtonText: rgb(0, 0, 0);
+        --GradientActiveTitle: rgb(166, 202, 240);
+        --GradientInactiveTitle: rgb(192, 192, 192);
+        --GrayText: rgb(128, 128, 128);
+        --Hilight: rgb(10, 36, 106);
+        --HilightText: rgb(255, 255, 255);
+        --HotTrackingColor: rgb(0, 0, 128);
+        --InactiveBorder: rgb(212, 208, 200);
+        --InactiveTitle: rgb(128, 128, 128);
+        --InactiveTitleText: rgb(212, 208, 200);
+        --InfoText: rgb(0, 0, 0);
+        --InfoWindow: rgb(255, 255, 225);
+        --Menu: rgb(212, 208, 200);
+        --MenuBar: rgb(192, 192, 192);
+        --MenuHilight: rgb(0, 0, 128);
+        --MenuText: rgb(0, 0, 0);
+        --Scrollbar: rgb(212, 208, 200);
+        --TitleText: rgb(255, 255, 255);
+        --Window: rgb(255, 255, 255);
+        --WindowFrame: rgb(0, 0, 0);
+        --WindowText: rgb(0, 0, 0);
+      }
+
+      html,
+      body {
+        height: 100%;
+        font-family: Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--Background);
+        text-align: center;
+        margin: 0;
+      }
+
+      textarea.emscripten {
+        font-family: monospace;
+        width: 80%;
+      }
+
+      main {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      canvas.emscripten {
+        border: 0 none;
+        background-color: #000;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      #status {
+        margin: 40px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="emscripten" id="status">Downloading...</div>
+      <div class="emscripten">
+        <progress hidden id="progress" max="100" value="0"></progress>
+      </div>
+      <canvas
+        class="emscripten"
+        id="canvas"
+        oncontextmenu="event.preventDefault()"
+        style="display: none"
+        tabindex="0"
+      ></canvas>
+    </main>
+    <script>
+      var statusElement = document.getElementById('status'),
+        progressElement = document.getElementById('progress'),
+        Module = {
+          preRun: [],
+          postRun: [],
+          print: (function () {
+            var e = document.getElementById('output');
+            return (
+              e && (e.value = ''),
+              function (e) {
+                arguments.length > 1 &&
+                  (e = Array.prototype.slice.call(arguments).join(' '));
+                console.log(e);
+              }
+            );
+          })(),
+          printErr: function (e) {
+            arguments.length > 1 &&
+              (e = Array.prototype.slice.call(arguments).join(' '));
+            console.error(e);
+          },
+          canvas: (function () {
+            var e = document.getElementById('canvas');
+            return (
+              e.addEventListener(
+                'webglcontextlost',
+                function (e) {
+                  alert(
+                    'WebGL context lost. You will need to reload the page.'
+                  );
+                  e.preventDefault();
+                },
+                !1
+              ),
+              e
+            );
+          })(),
+          setStatus: function (e) {
+            if (
+              (Module.setStatus.last ||
+                (Module.setStatus.last = { time: Date.now(), text: '' }),
+              e !== Module.setStatus.last.text)
+            ) {
+              var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
+                n = Date.now();
+              if (!(t && n - Module.setStatus.last.time < 30)) {
+                if (
+                  ((Module.setStatus.last.time = n),
+                  (Module.setStatus.last.text = e),
+                  t)
+                )
+                  (e = t[1]),
+                    (progressElement.value = 100 * parseInt(t[2])),
+                    (progressElement.max = 100 * parseInt(t[4])),
+                    (progressElement.hidden = !1);
+                else
+                  (progressElement.value = null),
+                    (progressElement.max = null),
+                    (progressElement.hidden = !0),
+                    (document.getElementById('canvas').style.display = '');
+                statusElement.innerHTML = e;
+                '' === e
+                  ? ((statusElement.style.display = 'none'),
+                    (progressElement.style.display = 'none'))
+                  : ((statusElement.style.display = ''),
+                    (progressElement.style.display = ''));
+              }
+            }
+          },
+          totalDependencies: 0,
+          monitorRunDependencies: function (e) {
+            (this.totalDependencies = Math.max(this.totalDependencies, e)),
+              Module.setStatus(
+                e
+                  ? 'Preparing... (' +
+                      (this.totalDependencies - e) +
+                      '/' +
+                      this.totalDependencies +
+                      ')'
+                  : 'All downloads complete.'
+              );
+          },
+        };
+      Module.setStatus('Downloading...');
+      window.onerror = function () {
+        Module.setStatus('Exception thrown, see JavaScript console'),
+          (Module.setStatus = function (e) {
+            e && Module.printErr('[post-exception status] ' + e);
+          });
+      };
+
+      function resizeCanvas() {
+        var canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+    </script>
+    <script async src="SpaceCadetPinball.js"></script>
+    <script>
+      document.addEventListener(
+        'click',
+        () => {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage('focus-window', '*');
+          }
+        },
+        true
+      );
+    </script>
+  </body>
+</html>
