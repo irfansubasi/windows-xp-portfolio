@@ -1,3 +1,4 @@
+import DoomGameContent from '../components/Windows/WindowContent/Games/DoomGameContent';
 import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
 import type { WindowDefinition } from './windowDefinitions';
 
@@ -18,7 +19,7 @@ export const gameDefinitions: WindowDefinition[] = [
     id: 'doom',
     name: 'Doom',
     icon: '/assets/games/Doom/doom.ico',
-    windowContent: null,
+    windowContent: <DoomGameContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
       hideAddressBar: true,
