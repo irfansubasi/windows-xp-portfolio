@@ -26,6 +26,7 @@
   flex: 1;
   padding: 5px 8px;
   color: #000000;
+  background: #ffffff;
   border: 1px solid transparent;
   border-radius: 2px;
   box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #f0f0f0,
@@ -52,6 +53,7 @@
   flex: 1;
   padding: 5px 8px;
   color: #000000;
+  background: #ffffff;
   border: 1px solid transparent;
   border-radius: 2px;
   box-shadow: inset 1.75px 1.75px 0 #888, inset -1.75px -1.75px 0 #f0f0f0,
