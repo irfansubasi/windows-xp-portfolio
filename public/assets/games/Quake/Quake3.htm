@@ -594,5 +594,16 @@
         } catch (err) {}
       });
     </script>
+    <script>
+      document.addEventListener(
+        'click',
+        () => {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage('focus-window', '*');
+          }
+        },
+        true
+      );
+    </script>
   </body>
 </html>
