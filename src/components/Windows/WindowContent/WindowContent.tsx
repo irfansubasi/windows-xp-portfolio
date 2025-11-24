@@ -5,10 +5,7 @@ interface WindowContentProps {
   children?: ReactNode;
   isZoomed?: boolean;
   onZoomToggle?: () => void;
-  onContactSend?: (payload: {
-    subject: string;
-    body: string;
-  }) => void;
+  onContactSend?: (payload: { subject: string; body: string }) => void;
 }
 
 export const WindowContent = ({
@@ -36,10 +33,7 @@ export const WindowContent = ({
         return cloneElement(child, {
           onSend: onContactSend,
         } as {
-          onSend?: (payload: {
-            subject: string;
-            body: string;
-          }) => void;
+          onSend?: (payload: { subject: string; body: string }) => void;
         });
       }
     }
