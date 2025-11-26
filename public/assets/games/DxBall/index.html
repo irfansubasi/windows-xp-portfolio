@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DX-Ball</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: none;
+      }
+
+      #dx-ball {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        cursor: none;
+      }
+    </style>
+    <script>
+      (function () {
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        const originalLog = console.log;
+
+        console.warn = function (...args) {
+          const message = args.join(' ');
+          if (
+            message.includes('WebMediaPlayer') ||
+            message.includes('crbug.com/1144736')
+          ) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+
+        console.error = function (...args) {
+          const message = args.join(' ');
+          if (
+            message.includes('WebMediaPlayer') ||
+            message.includes('crbug.com/1144736')
+          ) {
+            return;
+          }
+          originalError.apply(console, args);
+        };
+
+        const originalInfo = console.info;
+        console.info = function (...args) {
+          const message = args.join(' ');
+          if (
+            message.includes('[Intervention]') &&
+            message.includes('WebMediaPlayer')
+          ) {
+            return;
+          }
+          originalInfo.apply(console, args);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <canvas id="dx-ball"></canvas>
+
+    <script src="/assets/games/DxBall/game.js"></script>
+    <script>
+      if (
+        window.DXBall &&
+        window.DXBall.basePath === '/Program Files/DX-Ball'
+      ) {
+        window.DXBall.basePath = '/assets/games/DxBall';
+      }
+
+      window.addEventListener('load', () => {
+        if (window.DXBall && window.DXBall.init) {
+          const originalInit = window.DXBall.init;
+          window.DXBall.init = function (loadedFunction, saveFunction) {
+            originalInit.call(this, loadedFunction, saveFunction);
+
+            setTimeout(() => {
+              const canvas = document.getElementById('dx-ball');
+              if (canvas && window.canvas) {
+              }
+            }, 500);
+          };
+        }
+      });
+
+      window.addEventListener('load', () => {
+        if (window.DXBall && window.DXBall.init) {
+          window.DXBall.init(
+            () => {},
+            (name, score) => {
+              return '';
+            }
+          );
+        }
+      });
+
+      if (window.DXBall) {
+        window.DXBall.calcRecords = (user) => {
+          return '';
+        };
+      }
+
+      document.addEventListener(
+        'keydown',
+        (e) => {
+          if (e.keyCode === 13) {
+          }
+        },
+        true
+      );
+
+      document.addEventListener(
+        'click',
+        () => {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage('focus-window', '*');
+          }
+        },
+        true
+      );
+    </script>
+  </body>
+</html>

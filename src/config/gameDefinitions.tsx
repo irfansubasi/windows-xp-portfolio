@@ -1,4 +1,5 @@
 import DoomGameContent from '../components/Windows/WindowContent/Games/DoomGameContent';
+import DxBallGameContent from '../components/Windows/WindowContent/Games/DxBallGameContent';
 import PinballGameContent from '../components/Windows/WindowContent/Games/PinballGameContent';
 import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
 import type { WindowDefinition } from './windowDefinitions';
@@ -8,7 +9,7 @@ export const gameDefinitions: WindowDefinition[] = [
     id: 'dxBall',
     name: 'DX Ball',
     icon: '/assets/games/DxBall/dxball.webp',
-    windowContent: null,
+    windowContent: <DxBallGameContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
       hideAddressBar: true,
