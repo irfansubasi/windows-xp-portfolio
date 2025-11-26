@@ -1,5 +1,6 @@
 import styles from './GameContent.module.css';
 import { useEffect, useRef, useState } from 'react';
+import { useWindowContext } from '../../../../context/useWindowContext';
 
 declare global {
   interface Window {
@@ -16,7 +17,9 @@ interface DosGameContentProps {
 
 export const DosGameContent = ({ gameUrl }: DosGameContentProps) => {
   const dosRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const { focusWindow } = useWindowContext();
 
   useEffect(() => {
     const checkScript = () => {
@@ -47,8 +50,31 @@ export const DosGameContent = ({ gameUrl }: DosGameContentProps) => {
     };
   }, [isScriptLoaded, gameUrl]);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const handleMouseDown = () => {
+      let parent = containerRef.current?.parentElement;
+      while (parent) {
+        const windowId = parent.getAttribute('data-window-id');
+        if (windowId) {
+          focusWindow(windowId);
+          break;
+        }
+        parent = parent.parentElement;
+      }
+    };
+
+    const container = containerRef.current;
+    container.addEventListener('mousedown', handleMouseDown, true);
+
+    return () => {
+      container.removeEventListener('mousedown', handleMouseDown, true);
+    };
+  }, [focusWindow]);
+
   return (
-    <div className={styles.gameContainer}>
+    <div ref={containerRef} className={styles.gameContainer}>
       <div ref={dosRef} style={{ width: '100%', height: '100%' }}></div>
     </div>
   );
