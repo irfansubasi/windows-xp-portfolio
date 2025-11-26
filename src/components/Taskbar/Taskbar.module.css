@@ -130,6 +130,7 @@
   writing-mode: vertical-lr;
   direction: rtl;
   box-shadow: inset 1px 0 0 0 #888;
+  background: #ffffff;
 }
 
 .volume-slider::-webkit-slider-runnable-track {
