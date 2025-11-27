@@ -13,6 +13,7 @@ export interface WindowConfig {
   hideAddressBar?: boolean;
   hideToolbar?: boolean;
   hideMenubar?: boolean;
+  disableResize?: boolean;
 }
 
 export interface WindowDefinition {

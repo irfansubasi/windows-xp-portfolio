@@ -72,6 +72,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
         hideAddressBar?: boolean;
         hideToolbar?: boolean;
         hideMenubar?: boolean;
+        disableResize?: boolean;
       }
     ) => {
       setWindows((prev) => {
@@ -102,6 +103,7 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
           hideAddressBar: options?.hideAddressBar,
           hideToolbar: options?.hideToolbar,
           hideMenubar: options?.hideMenubar,
+          disableResize: options?.disableResize,
           previousPosition: undefined,
           previousSize: undefined,
         };

@@ -23,6 +23,7 @@ export interface WindowData {
   hideAddressBar?: boolean;
   hideToolbar?: boolean;
   hideMenubar?: boolean;
+  disableResize?: boolean;
   previousPosition?: { x: number; y: number };
   previousSize?: { width: number; height: number };
 }
@@ -41,6 +42,7 @@ export interface WindowContextType {
       hideAddressBar?: boolean;
       hideToolbar?: boolean;
       hideMenubar?: boolean;
+      disableResize?: boolean;
     }
   ) => void;
   closeWindow: (id: string) => void;

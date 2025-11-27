@@ -39,6 +39,7 @@ export const GamesFolderContent = () => {
           hideAddressBar: gameDefinition.windowConfig?.hideAddressBar,
           hideToolbar: gameDefinition.windowConfig?.hideToolbar,
           hideMenubar: gameDefinition.windowConfig?.hideMenubar,
+          disableResize: gameDefinition.windowConfig?.disableResize,
         }
       );
     },

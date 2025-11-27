@@ -34,6 +34,7 @@ export const Desktop = () => {
           hideAddressBar: icon.windowConfig?.hideAddressBar,
           hideToolbar: icon.windowConfig?.hideToolbar,
           hideMenubar: icon.windowConfig?.hideMenubar,
+          disableResize: icon.windowConfig?.disableResize,
         }
       );
     },

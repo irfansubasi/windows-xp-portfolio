@@ -47,6 +47,7 @@ export const Window = ({
   const currentWindow = windows.find((w) => w.id === id);
   const isMaximized = currentWindow?.isMaximized;
   const isActive = focusedWindowId === id;
+  const disableResize = currentWindow?.disableResize ?? false;
   const [isZoomed, setIsZoomed] = useState(false);
 
   const handleZoomToggle = () => {
@@ -310,7 +311,7 @@ export const Window = ({
     direction: ResizeDirection
   ) => {
     e.stopPropagation();
-    if (!windowRef.current || isMaximized) return;
+    if (!windowRef.current || isMaximized || disableResize) return;
 
     focusWindow(id);
     const rect = windowRef.current.getBoundingClientRect();
@@ -488,14 +489,15 @@ export const Window = ({
           {children}
         </WindowContent>
       </div>
-      {resizeHandles.map((direction) => (
-        <div
-          key={direction}
-          className={styles.resizeHandle}
-          data-direction={direction}
-          onMouseDown={(e) => handleResizeStart(e, direction)}
-        />
-      ))}
+      {!disableResize &&
+        resizeHandles.map((direction) => (
+          <div
+            key={direction}
+            className={styles.resizeHandle}
+            data-direction={direction}
+            onMouseDown={(e) => handleResizeStart(e, direction)}
+          />
+        ))}
     </motion.div>
   );
 };
