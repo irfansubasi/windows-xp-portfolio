@@ -2,15 +2,6 @@ import styles from './GameContent.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useWindowContext } from '../../../../context/useWindowContext';
 
-declare global {
-  interface Window {
-    Dos: (
-      element: HTMLElement,
-      options: { url: string; autoStart: boolean }
-    ) => any;
-  }
-}
-
 interface DosGameContentProps {
   gameUrl: string;
 }
