@@ -1,3 +1,4 @@
+import ClassiCubeGameContent from '../components/Windows/WindowContent/Games/ClassiCubeGameContent';
 import DoomGameContent from '../components/Windows/WindowContent/Games/DoomGameContent';
 import DxBallGameContent from '../components/Windows/WindowContent/Games/DxBallGameContent';
 import PinballGameContent from '../components/Windows/WindowContent/Games/PinballGameContent';
@@ -46,6 +47,18 @@ export const gameDefinitions: WindowDefinition[] = [
     name: 'Pinball',
     icon: '/assets/games/Pinball/pinball.webp',
     windowContent: <PinballGameContent />,
+    windowConfig: {
+      size: { width: 800, height: 600 },
+      hideAddressBar: true,
+      hideToolbar: true,
+      hideMenubar: true,
+    },
+  },
+  {
+    id: 'classiCube',
+    name: 'ClassiCube',
+    icon: '/assets/games/ClassiCube/classicube.png',
+    windowContent: <ClassiCubeGameContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
       hideAddressBar: true,
