@@ -116,3 +116,8 @@
 .resizeHandle[data-direction='se'] {
   cursor: url('/assets/cursors/default_size2.cur'), auto;
 }
+
+.window[data-window-id='minesweeper'] {
+  min-width: 100px;
+  min-height: 250px;
+}

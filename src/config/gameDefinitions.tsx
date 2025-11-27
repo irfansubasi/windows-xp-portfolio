@@ -1,6 +1,7 @@
 import ClassiCubeGameContent from '../components/Windows/WindowContent/Games/ClassiCubeGameContent';
 import DoomGameContent from '../components/Windows/WindowContent/Games/DoomGameContent';
 import DxBallGameContent from '../components/Windows/WindowContent/Games/DxBallGameContent';
+import MinesweeperGameContent from '../components/Windows/WindowContent/Games/MinesweeperGameContent';
 import PinballGameContent from '../components/Windows/WindowContent/Games/PinballGameContent';
 import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
 import type { WindowDefinition } from './windowDefinitions';
@@ -64,6 +65,19 @@ export const gameDefinitions: WindowDefinition[] = [
       hideAddressBar: true,
       hideToolbar: true,
       hideMenubar: true,
+    },
+  },
+  {
+    id: 'minesweeper',
+    name: 'Minesweeper',
+    icon: '/assets/games/Minesweeper/Minesweeper.png',
+    windowContent: <MinesweeperGameContent />,
+    windowConfig: {
+      size: { width: 800, height: 600 },
+      hideAddressBar: true,
+      hideToolbar: true,
+      hideMenubar: true,
+      disableResize: true,
     },
   },
 ];
