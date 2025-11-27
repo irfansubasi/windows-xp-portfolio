@@ -306,6 +306,11 @@ export const Window = ({
     });
   };
 
+  const handleMaximize = () => {
+    if (disableResize) return;
+    toggleMaximize(id);
+  };
+
   const handleResizeStart = (
     e: React.MouseEvent,
     direction: ResizeDirection
@@ -463,10 +468,11 @@ export const Window = ({
         icon={icon}
         onMouseDown={handleTitleBarMouseDown}
         onMinimize={() => toggleMinimize(id)}
-        onMaximize={() => toggleMaximize(id)}
+        onMaximize={handleMaximize}
         onClose={() => closeWindow(id)}
         isMaximized={!!isMaximized}
         isActive={isActive}
+        disableMaximize={disableResize}
       />
       <div className={styles.content}>
         {!currentWindow?.hideMenubar && <Menubar />}
