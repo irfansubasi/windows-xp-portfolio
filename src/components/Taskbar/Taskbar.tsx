@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Taskbar.module.css';
 import { format } from 'date-fns';
 import { useWindowContext } from '../../context/useWindowContext';
+import { useVolume } from '../../context/VolumeContext';
 
 const systemTrayItems = [
   { id: 'fullscreen', name: 'Fullscreen', icon: '/assets/fullscreen.png' },
@@ -14,8 +15,15 @@ export const Taskbar = () => {
     useWindowContext();
   const [time, setTime] = useState<string>('');
   const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
-  const [volume, setVolume] = useState(100);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
+  const {
+    masterVolume,
+    isMuted,
+    setMasterVolume,
+    setMuted,
+    perAppVolumes,
+    setAppVolume,
+  } = useVolume();
 
   useEffect(() => {
     const updateTime = () => {
@@ -108,22 +116,60 @@ export const Taskbar = () => {
         ))}
         {isVolumeSliderOpen && (
           <div className={styles['volume-slider-popup']}>
-            <div className={styles['volume-text']}>Volume</div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))}
-              className={styles['volume-slider']}
-            />
-            <div className={styles['volume-mute']}>
+            <div className={styles['volume-item']}>
+              <div className={styles['volume-text']}>Master</div>
               <input
-                type="checkbox"
-                className={styles['volume-mute-checkbox']}
+                type="range"
+                min="0"
+                max="100"
+                value={Math.round(masterVolume * 100)}
+                onChange={(e) => {
+                  const v = Number(e.target.value) / 100;
+                  setMasterVolume(v);
+                  if (v > 0 && isMuted) {
+                    setMuted(false);
+                  }
+                }}
+                className={styles['volume-slider']}
               />
-              <span className={styles['volume-mute-text']}>Mute</span>
+              <div className={styles['volume-mute']}>
+                <input
+                  type="checkbox"
+                  className={styles['volume-mute-checkbox']}
+                  checked={isMuted}
+                  onChange={(e) => setMuted(e.target.checked)}
+                />
+                <span className={styles['volume-mute-text']}>Mute</span>
+              </div>
             </div>
+            {Object.entries(perAppVolumes).map(([id, value]) => {
+              const label = id.charAt(0).toUpperCase() + id.slice(1);
+              return (
+                <div key={id} className={styles['volume-item']}>
+                  <div className={styles['volume-text']}>{label}</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={Math.round(value * 100)}
+                    onChange={(e) => {
+                      const v = Number(e.target.value) / 100;
+                      setAppVolume(id, v);
+                    }}
+                    className={styles['volume-slider']}
+                  />
+                  <div className={styles['volume-mute']}>
+                    <input
+                      type="checkbox"
+                      className={styles['volume-mute-checkbox']}
+                      checked={isMuted}
+                      onChange={(e) => setMuted(e.target.checked)}
+                    />
+                    <span className={styles['volume-mute-text']}>Mute</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
         <div className={styles['time']}>{time}</div>
