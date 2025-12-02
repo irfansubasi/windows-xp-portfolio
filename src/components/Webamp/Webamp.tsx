@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Webamp from 'webamp';
+import { useVolume } from '../../context/VolumeContext';
 
 let globalWebampInstance: Webamp | null = null;
 
@@ -34,10 +35,23 @@ export const WebampPlayer = ({
   const onFocusRef = useRef(onFocus);
   const onCloseRef = useRef(onClose);
 
+  const { masterVolume, isMuted, perAppVolumes, registerApp, unregisterApp } =
+    useVolume();
+
+  const appVolume = perAppVolumes.webamp ?? 1;
+
   useEffect(() => {
     onFocusRef.current = onFocus;
     onCloseRef.current = onClose;
   }, [onFocus, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    registerApp('webamp', 1);
+    return () => {
+      unregisterApp('webamp');
+    };
+  }, [isOpen, registerApp, unregisterApp]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -116,6 +130,16 @@ export const WebampPlayer = ({
       webampElement.style.top = `${position.y}px`;
     }
   }, [zIndex, position.x, position.y, isOpen]);
+
+  useEffect(() => {
+    if (!globalWebampInstance) return;
+
+    const effectivePercent = isMuted
+      ? 0
+      : Math.round(masterVolume * appVolume * 100);
+
+    globalWebampInstance.setVolume(effectivePercent);
+  }, [masterVolume, appVolume, isMuted]);
 
   if (!isOpen) return null;
 
