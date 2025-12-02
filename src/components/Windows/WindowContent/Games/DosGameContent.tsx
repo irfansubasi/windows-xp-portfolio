@@ -1,16 +1,22 @@
 import styles from './GameContent.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useWindowContext } from '../../../../context/useWindowContext';
+import { useVolume } from '../../../../context/VolumeContext';
 
 interface DosGameContentProps {
   gameUrl: string;
+  appId?: string;
 }
 
-export const DosGameContent = ({ gameUrl }: DosGameContentProps) => {
+export const DosGameContent = ({ gameUrl, appId }: DosGameContentProps) => {
   const dosRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const { focusWindow } = useWindowContext();
+
+  const dosInstanceRef = useRef<any>(null);
+
+  const { masterVolume, isMuted, perAppVolumes } = useVolume();
 
   useEffect(() => {
     const checkScript = () => {
@@ -32,14 +38,32 @@ export const DosGameContent = ({ gameUrl }: DosGameContentProps) => {
       autoStart: true,
     });
 
+    dosInstanceRef.current = dosInstance;
+
     return () => {
       try {
-        dosInstance?.stop?.();
+        dosInstanceRef.current?.stop?.();
       } catch (e) {
         console.log('Dos cleanup error:', e);
       }
+      dosInstanceRef.current = null;
     };
   }, [isScriptLoaded, gameUrl]);
+
+  useEffect(() => {
+    if (!dosInstanceRef.current) return;
+
+    const appVolume =
+      appId && perAppVolumes[appId] !== undefined ? perAppVolumes[appId] : 1;
+
+    const effectiveVolume = isMuted ? 0 : masterVolume * appVolume;
+
+    try {
+      dosInstanceRef.current.setVolume?.(effectiveVolume);
+    } catch (e) {
+      console.log('Dos setVolume error:', e);
+    }
+  }, [masterVolume, isMuted, perAppVolumes, appId]);
 
   useEffect(() => {
     if (!containerRef.current) return;
