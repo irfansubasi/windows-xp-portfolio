@@ -32,11 +32,12 @@
         cursor: none;
       }
     </style>
+
     <script>
       (function () {
         const originalWarn = console.warn;
         const originalError = console.error;
-        const originalLog = console.log;
+        const originalInfo = console.info;
 
         console.warn = function (...args) {
           const message = args.join(' ');
@@ -60,7 +61,6 @@
           originalError.apply(console, args);
         };
 
-        const originalInfo = console.info;
         console.info = function (...args) {
           const message = args.join(' ');
           if (
@@ -78,6 +78,7 @@
     <canvas id="dx-ball"></canvas>
 
     <script src="/assets/games/DxBall/game.js"></script>
+
     <script>
       if (
         window.DXBall &&
@@ -136,6 +137,67 @@
         },
         true
       );
+    </script>
+
+    <script>
+      window.addEventListener('message', (event) => {
+        const data = event.data;
+        if (!data || data.type !== 'set-volume') return;
+
+        const v = Math.max(0, Math.min(1, Number(data.volume)));
+
+        if (window.DXBall) {
+          if (window.DXBall.audioFiles) {
+            Object.values(window.DXBall.audioFiles).forEach((audio) => {
+              try {
+                if (audio && typeof audio.volume === 'number') {
+                  audio.volume = v;
+                }
+              } catch (e) {}
+            });
+          }
+
+          if (window.DXBall.audioTracks) {
+            window.DXBall.audioTracks.forEach((audio) => {
+              try {
+                if (audio && typeof audio.volume === 'number') {
+                  audio.volume = v;
+                }
+              } catch (e) {}
+            });
+          }
+
+          window.DXBall.masterVolume = v;
+        }
+
+        document.querySelectorAll('audio').forEach((audio) => {
+          try {
+            audio.volume = v;
+          } catch (e) {}
+        });
+      });
+
+      (function () {
+        if (window.__DXBALL_PATCHED_PLAY) return;
+        window.__DXBALL_PATCHED_PLAY = true;
+
+        const originalPlay = HTMLMediaElement.prototype.play;
+
+        HTMLMediaElement.prototype.play = function (...args) {
+          try {
+            const mv =
+              window.DXBall && typeof window.DXBall.masterVolume === 'number'
+                ? window.DXBall.masterVolume
+                : 1;
+
+            if (typeof this.volume === 'number') {
+              this.volume = mv;
+            }
+          } catch (e) {}
+
+          return originalPlay.apply(this, args);
+        };
+      })();
     </script>
   </body>
 </html>
