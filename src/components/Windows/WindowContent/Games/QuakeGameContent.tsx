@@ -1,11 +1,21 @@
 import { useEffect, useRef } from 'react';
 import { useWindowContext } from '../../../../context/useWindowContext';
+import { useVolume } from '../../../../context/VolumeContext';
 import styles from './GameContent.module.css';
 
 export default function QuakeGameContent() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { focusedWindowId, focusWindow } = useWindowContext();
+  const { masterVolume, isMuted, perAppVolumes, registerApp, unregisterApp } =
+    useVolume();
+
+  useEffect(() => {
+    registerApp('quake', 1);
+    return () => {
+      unregisterApp('quake');
+    };
+  }, [registerApp, unregisterApp]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -52,6 +62,22 @@ export default function QuakeGameContent() {
       window.removeEventListener('message', handleMessage);
     };
   }, [focusedWindowId, focusWindow]);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+
+    const appVolume = perAppVolumes.quake ?? 1;
+    const effectiveVolume = isMuted ? 0 : masterVolume * appVolume;
+
+    iframe.contentWindow.postMessage(
+      {
+        type: 'set-volume',
+        volume: effectiveVolume,
+      },
+      '*'
+    );
+  }, [masterVolume, isMuted, perAppVolumes]);
 
   return (
     <div ref={containerRef} className={styles.gameContainer}>

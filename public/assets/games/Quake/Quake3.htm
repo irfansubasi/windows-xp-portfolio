@@ -44,6 +44,45 @@
         }
       })();
     </script>
+    <script>
+      (function () {
+        var OriginalAC = window.AudioContext || window.webkitAudioContext;
+        if (!OriginalAC) return;
+
+        var contexts = [];
+        window.__QUAKE_AUDIO_CONTEXTS = contexts;
+        window.__QUAKE_MASTER_VOLUME = 1;
+
+        function PatchedAudioContext() {
+          var ctx = new OriginalAC();
+          contexts.push(ctx);
+
+          try {
+            var masterGain = ctx.createGain();
+            var dest = ctx.destination;
+            masterGain.gain.value = window.__QUAKE_MASTER_VOLUME || 1;
+
+            ctx.__realDestination = dest;
+            ctx.__masterGain = masterGain;
+
+            masterGain.connect(dest);
+
+            Object.defineProperty(ctx, 'destination', {
+              get: function () {
+                return masterGain;
+              },
+            });
+          } catch (e) {}
+
+          return ctx;
+        }
+
+        window.AudioContext = PatchedAudioContext;
+        if (window.webkitAudioContext) {
+          window.webkitAudioContext = PatchedAudioContext;
+        }
+      })();
+    </script>
     <style>
       html,
       body {
@@ -604,6 +643,27 @@
         },
         true
       );
+    </script>
+    <script>
+      window.addEventListener('message', function (event) {
+        var data = event.data;
+        if (!data || data.type !== 'set-volume') return;
+
+        var v = Number(data.volume);
+        if (isNaN(v)) return;
+        v = Math.max(0, Math.min(1, v));
+
+        window.__QUAKE_MASTER_VOLUME = v;
+
+        var contexts = window.__QUAKE_AUDIO_CONTEXTS || [];
+        contexts.forEach(function (ctx) {
+          try {
+            if (ctx.__masterGain) {
+              ctx.__masterGain.gain.value = v;
+            }
+          } catch (e) {}
+        });
+      });
     </script>
   </body>
 </html>
