@@ -143,5 +143,56 @@
         true
       );
     </script>
+    <script type="text/javascript">
+      window.addEventListener('message', function (event) {
+        var data = event.data;
+        if (!data || data.type !== 'set-volume') return;
+
+        var v = Number(data.volume);
+        if (isNaN(v)) return;
+        v = Math.max(0, Math.min(1, v));
+
+        window.SPIDER_MASTER_VOLUME = v;
+
+        document.querySelectorAll('audio').forEach(function (audio) {
+          try {
+            audio.volume = v;
+          } catch (e) {}
+        });
+
+        try {
+          if (window.audio && window.audio.sounds) {
+            for (var i = 0; i < window.audio.sounds.length; i++) {
+              var s = window.audio.sounds[i];
+              if (s && s.player && typeof s.player.volume === 'number') {
+                s.player.volume = v;
+              }
+            }
+          }
+        } catch (e) {}
+      });
+    </script>
+    <script type="text/javascript">
+      (function () {
+        if (window.__SPIDER_PATCHED_PLAY) return;
+        window.__SPIDER_PATCHED_PLAY = true;
+
+        var originalPlay = HTMLMediaElement.prototype.play;
+
+        HTMLMediaElement.prototype.play = function () {
+          try {
+            var mv =
+              typeof window.SPIDER_MASTER_VOLUME === 'number'
+                ? window.SPIDER_MASTER_VOLUME
+                : 1;
+            if (typeof this.volume === 'number') {
+              this.volume = mv;
+            }
+          } catch (e) {}
+
+          return originalPlay.apply(this, arguments);
+        };
+      })();
+    </script>
   </body>
 </html>
