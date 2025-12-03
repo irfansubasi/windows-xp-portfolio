@@ -4,6 +4,7 @@ import DxBallGameContent from '../components/Windows/WindowContent/Games/DxBallG
 import MinesweeperGameContent from '../components/Windows/WindowContent/Games/MinesweeperGameContent';
 import PinballGameContent from '../components/Windows/WindowContent/Games/PinballGameContent';
 import QuakeGameContent from '../components/Windows/WindowContent/Games/QuakeGameContent';
+import SpiderSolitaireGameContent from '../components/Windows/WindowContent/Games/SpiderSolitaireGameContent';
 import type { WindowDefinition } from './windowDefinitions';
 
 export const gameDefinitions: WindowDefinition[] = [
@@ -78,6 +79,18 @@ export const gameDefinitions: WindowDefinition[] = [
       hideToolbar: true,
       hideMenubar: true,
       disableResize: true,
+    },
+  },
+  {
+    id: 'spiderSolitaire',
+    name: 'Spider Solitaire',
+    icon: '/assets/games/Spider/spider.png',
+    windowContent: <SpiderSolitaireGameContent />,
+    windowConfig: {
+      size: { width: 800, height: 600 },
+      hideAddressBar: true,
+      hideToolbar: true,
+      hideMenubar: true,
     },
   },
 ];

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Spider Solitaire Windows XP</title>
+    <script src="./jquery.min.js"></script>
+
+    <script type="text/javascript" src="./graphics.js"></script>
+    <script type="text/javascript" src="./sprite.js"></script>
+    <script type="text/javascript" src="./audio.js"></script>
+    <script type="text/javascript" src="./button.js"></script>
+    <script type="text/javascript" src="./prompt.js"></script>
+    <script type="text/javascript" src="./game.js"></script>
+    <script type="text/javascript" src="./card.js"></script>
+    <script type="text/javascript" src="./pool.js"></script>
+    <script type="text/javascript" src="./cardmanager.js"></script>
+    <script type="text/javascript" src="./rules.js"></script>
+    <script type="text/javascript" src="./drawmanager.js"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui=1"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+  </head>
+  <body
+    style="background-color: #000000"
+    oncontextmenu="return false"
+    cz-shortcut-listen="true"
+  >
+    <canvas
+      id="canvas"
+      style="cursor: default; position: absolute; margin: 0"
+      width="880"
+      height="550"
+    >
+    </canvas>
+    <script type="text/javascript">
+      var graphics = new Graphics('canvas');
+      var game = new Game();
+      game.setGraphics(graphics);
+      game.load();
+      game.initialize();
+
+      // Set canvas size on load and resize
+      function resizeCanvas() {
+        graphics.setFullscreen();
+      }
+      window.addEventListener('resize', resizeCanvas);
+
+      window.onload = function () {
+        window.scrollTo(0, 1);
+        resizeCanvas();
+
+        (function () {
+          var lastTime = 0;
+          var vendors = ['webkit', 'moz', 'o', 'ms'];
+          for (
+            var x = 0;
+            x < vendors.length && !window.requestAnimationFrame;
+            ++x
+          ) {
+            window.requestAnimationFrame =
+              window[vendors[x] + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame =
+              window[vendors[x] + 'CancelAnimationFrame'] ||
+              window[vendors[x] + 'CancelRequestAnimationFrame'];
+          }
+
+          if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function (callback, element) {
+              var currTime = new Date().getTime();
+              var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+              var id = window.setTimeout(function () {
+                callback(currTime + timeToCall);
+              }, timeToCall);
+              lastTime = currTime + timeToCall;
+              return id;
+            };
+
+          if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function (id) {
+              clearTimeout(id);
+            };
+        })();
+
+        var ga = {};
+
+        ga.gameTime = {
+          // we define just an object since
+          //  there is only one instance.
+          lastTime: Date.now(),
+          frameTime: 0,
+          typicalFrameTime: 20,
+          minFrameTime: 12,
+          time: 0,
+        };
+
+        // move the clock one tick. return true if new frame,
+        //      false otherwise.
+        ga.gameTime.tick = function () {
+          var now = Date.now();
+          var delta = now - this.lastTime;
+          if (delta < this.minFrameTime) return false;
+          if (delta > 2 * this.typicalFrameTime) {
+            // +1 frame if too much time elapsed
+            this.frameTime = this.typicalFrameTime;
+          } else {
+            this.frameTime = delta;
+          }
+          this.time += this.frameTime;
+          this.lastTime = now;
+          return true;
+        };
+
+        ga.Game = function () {
+          this.boundGameRun = this.gameRun.bind(this);
+        };
+
+        ga.Game.prototype.gameRun = function () {
+          if (ga.gameTime.tick()) {
+            game.gameLoop();
+          }
+          requestAnimationFrame(this.boundGameRun);
+        };
+
+        var myGame = new ga.Game();
+        myGame.gameRun();
+      };
+    </script>
+    <script type="text/javascript">
+      document.addEventListener(
+        'click',
+        function () {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage('focus-window', '*');
+          }
+        },
+        true
+      );
+    </script>
+  </body>
+</html>
