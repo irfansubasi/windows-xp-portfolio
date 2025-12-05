@@ -8,6 +8,7 @@ import { GamesFolderContent } from '../components/Windows/WindowContent/GamesFol
 import { gameDefinitions } from './gameDefinitions';
 import { MyDocumentsFolderContent } from '../components/Windows/WindowContent/MyDocumentsFolderContent';
 import { MyPicturesFolderContent } from '../components/Windows/WindowContent/MyPicturesFolderContent';
+import { MyMusicFolderContent } from '../components/Windows/WindowContent/MyMusicFolderContent';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
@@ -123,20 +124,35 @@ const definitions: WindowDefinition[] = [
       size: { width: 600, height: 400 },
     },
   },
+  {
+    id: 'myMusicFolder',
+    name: 'My Music',
+    icon: '/assets/icons/MyMusic.png',
+    windowContent: <MyMusicFolderContent />,
+    windowConfig: {
+      size: { width: 600, height: 400 },
+    },
+  },
 ];
 
 const allDefinitions = [...definitions, ...gameDefinitions];
 
 export const desktopIcons = definitions.filter(
-  (icon) => icon.id !== 'myDocumentsFolder' && icon.id !== 'myPicturesFolder'
+  (icon) =>
+    icon.id !== 'myDocumentsFolder' &&
+    icon.id !== 'myPicturesFolder' &&
+    icon.id !== 'myMusicFolder'
 );
 
 export const leftPanelItems = desktopIcons.filter(
-  (icon) => icon.id !== 'myDocumentsFolder' && icon.id !== 'gamesFolder'
+  (icon) => icon.id !== 'gamesFolder'
 );
 
 export const rightPanelItems = allDefinitions.filter(
-  (icon) => icon.id === 'myDocumentsFolder' || icon.id === 'myPicturesFolder'
+  (icon) =>
+    icon.id === 'myDocumentsFolder' ||
+    icon.id === 'myPicturesFolder' ||
+    icon.id === 'myMusicFolder'
 );
 
 export const getWindowDefinition = (id: string) =>
