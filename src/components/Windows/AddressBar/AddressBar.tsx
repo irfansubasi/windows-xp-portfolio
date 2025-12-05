@@ -10,7 +10,7 @@ export const AddressBar = ({ path, icon }: AddressBarProps) => {
       <span className={styles.addressBarText}>Address</span>
       <div className={styles.addressBarPath}>
         <img
-          src={`${icon ? icon : '/assets/folder.png'}`}
+          src={`${icon ? icon : '/assets/icons/folder.png'}`}
           alt="folder"
           className={styles.icon}
         />

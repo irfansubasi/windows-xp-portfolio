@@ -5,9 +5,21 @@ import { useWindowContext } from '../../context/useWindowContext';
 import { useVolume } from '../../context/VolumeContext';
 
 const systemTrayItems = [
-  { id: 'fullscreen', name: 'Fullscreen', icon: '/assets/fullscreen.png' },
-  { id: 'security', name: 'Security', icon: '/assets/Security.png' },
-  { id: 'volume', name: 'Volume', icon: '/assets/Volume.png' },
+  {
+    id: 'fullscreen',
+    name: 'Fullscreen',
+    icon: '/assets/icons/fullscreen.png',
+  },
+  {
+    id: 'security',
+    name: 'Security',
+    icon: '/assets/icons/Security.png',
+  },
+  {
+    id: 'volume',
+    name: 'Volume',
+    icon: '/assets/icons/Volume.png',
+  },
 ];
 
 export const Taskbar = () => {

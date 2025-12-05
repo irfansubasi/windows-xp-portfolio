@@ -14,7 +14,7 @@
 #startButton {
   width: 100px;
   height: 100%;
-  background-image: url('/assets/start_btn_normal.png');
+  background-image: url('/assets/icons/start_btn_normal.png');
   background-size: cover;
   flex-shrink: 0;
 }
@@ -158,7 +158,7 @@
   appearance: none;
   width: 20px;
   height: 20px;
-  background: url('/assets/indicator-rectangle-horizontal.svg');
+  background: url('/assets/icons/indicator-rectangle-horizontal.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -168,7 +168,7 @@
 .volume-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: url('/assets/indicator-rectangle-horizontal.svg');
+  background: url('/assets/icons/indicator-rectangle-horizontal.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

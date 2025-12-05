@@ -32,7 +32,7 @@
 .goButton {
   width: 30px;
   height: 20px;
-  background-image: url('/assets/go.png');
+  background-image: url('/assets/icons/go.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

@@ -35,7 +35,7 @@
 .windowsLogoImage {
   width: 20px;
   height: 20px;
-  background-image: url('/assets/ms.png');
+  background-image: url('/assets/icons/ms.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

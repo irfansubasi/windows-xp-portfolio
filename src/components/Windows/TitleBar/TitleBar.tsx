@@ -38,7 +38,7 @@ export const TitleBar = ({
             onMinimize?.();
           }}
         >
-          <img src="/assets/Minimize.png" alt="minimize" />
+          <img src="/assets/icons/Minimize.png" alt="minimize" />
         </button>
         {!disableMaximize && (
           <button
@@ -49,7 +49,11 @@ export const TitleBar = ({
             }}
           >
             <img
-              src={isMaximized ? '/assets/Restore.png' : '/assets/Maximize.png'}
+              src={
+                isMaximized
+                  ? '/assets/icons/Restore.png'
+                  : '/assets/icons/Maximize.png'
+              }
               alt={isMaximized ? 'restore' : 'maximize'}
             />
           </button>
@@ -61,7 +65,7 @@ export const TitleBar = ({
             onClose?.();
           }}
         >
-          <img src="/assets/Exit.png" alt="close" />
+          <img src="/assets/icons/Exit.png" alt="close" />
         </button>
       </div>
     </div>

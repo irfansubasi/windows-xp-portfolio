@@ -28,47 +28,47 @@ const definitions: WindowDefinition[] = [
   {
     id: 'resume',
     name: 'Resume',
-    icon: '/assets/PDF.ico',
+    icon: '/assets/icons/PDF.ico',
     windowContent: <ResumeContent />,
     windowConfig: {
       size: { width: 700, height: 800 },
       toolbarItems: [
-        { icon: '/assets/Search.png', label: 'Zoom' },
-        { icon: '/assets/Save.png', label: 'Save' },
-        { icon: '/assets/mail.png', label: 'Contact Me' },
+        { icon: '/assets/icons/Search.png', label: 'Zoom' },
+        { icon: '/assets/icons/Save.png', label: 'Save' },
+        { icon: '/assets/icons/mail.png', label: 'Contact Me' },
       ],
     },
   },
   {
     id: 'aboutme',
     name: 'About Me',
-    icon: '/assets/Information.png',
+    icon: '/assets/icons/Information.png',
     windowContent: <AboutMeContent />,
     windowConfig: {
       hideAddressBar: true,
       size: { width: 700, height: 650 },
       toolbarItems: [
-        { icon: '/assets/linkedin.png', label: 'LinkedIn' },
-        { icon: '/assets/github.png', label: 'GitHub' },
-        { icon: '/assets/PDF.ico', label: 'Resume' },
+        { icon: '/assets/icons/linkedin.png', label: 'LinkedIn' },
+        { icon: '/assets/icons/github.png', label: 'GitHub' },
+        { icon: '/assets/icons/PDF.ico', label: 'Resume' },
       ],
     },
   },
   {
     id: 'contact',
     name: 'Contact Me',
-    icon: '/assets/mail.png',
+    icon: '/assets/icons/mail.png',
     windowContent: <ContactContent />,
     windowConfig: {
       hideAddressBar: true,
-      toolbarItems: [{ icon: '/assets/send.png', label: 'Send' }],
+      toolbarItems: [{ icon: '/assets/icons/send.png', label: 'Send' }],
       size: { width: 500, height: 350 },
     },
   },
   {
     id: 'webamp',
     name: 'Winamp',
-    icon: '/assets/winamp.png',
+    icon: '/assets/icons/winamp.png',
     windowContent: null,
     windowConfig: {
       size: { width: 275, height: 116 },
@@ -77,7 +77,7 @@ const definitions: WindowDefinition[] = [
   {
     id: 'paint',
     name: 'Paint',
-    icon: '/assets/Paint.png',
+    icon: '/assets/icons/Paint.png',
     windowContent: <PaintContent />,
     windowConfig: {
       size: { width: 800, height: 600 },
@@ -89,7 +89,7 @@ const definitions: WindowDefinition[] = [
   {
     id: 'gamesFolder',
     name: 'Games',
-    icon: '/assets/folder.png',
+    icon: '/assets/icons/folder.png',
     windowContent: <GamesFolderContent />,
     windowConfig: {
       size: { width: 600, height: 400 },

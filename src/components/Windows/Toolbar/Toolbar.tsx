@@ -35,7 +35,7 @@ export const Toolbar = ({ items }: ToolbarProps) => {
     <div className={styles.toolbar}>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/Back.png"
+          src="/assets/icons/Back.png"
           alt="back"
           className={`${styles.icon} ${styles.disabled}`}
         />
@@ -43,14 +43,14 @@ export const Toolbar = ({ items }: ToolbarProps) => {
       </div>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/Forward.png"
+          src="/assets/icons/Forward.png"
           alt="forward"
           className={`${styles.icon} ${styles.disabled}`}
         />
       </div>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/Up.png"
+          src="/assets/icons/Up.png"
           alt="up"
           className={`${styles.icon} ${styles.disabled}`}
         />
@@ -60,7 +60,7 @@ export const Toolbar = ({ items }: ToolbarProps) => {
       </div>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/Search.png"
+          src="/assets/icons/Search.png"
           alt="search"
           className={`${styles.icon} ${styles.disabled}`}
         />
@@ -68,7 +68,7 @@ export const Toolbar = ({ items }: ToolbarProps) => {
       </div>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/folderview.png"
+          src="/assets/icons/folderview.png"
           alt="folder view"
           className={`${styles.icon} ${styles.disabled}`}
         />
@@ -79,7 +79,7 @@ export const Toolbar = ({ items }: ToolbarProps) => {
       </div>
       <div className={styles.toolbarItem}>
         <img
-          src="/assets/classic.png"
+          src="/assets/icons/classic.png"
           alt="classic view"
           className={`${styles.icon} ${styles.disabled}`}
         />
