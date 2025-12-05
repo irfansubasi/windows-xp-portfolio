@@ -41,7 +41,10 @@ export default function StartMenu() {
 
   return (
     <div className={styles.startMenu}>
-      <div className={styles.topBar}></div>
+      <div className={styles.topBar}>
+        <div className={styles.avatar}></div>
+        <div className={styles.avatarText}>IrfanSubasi</div>
+      </div>
       <div className={styles.orangeLine}></div>
       <div className={styles.content}>
         <div className={styles.leftPanel}>

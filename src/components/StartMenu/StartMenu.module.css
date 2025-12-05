@@ -35,6 +35,10 @@
   height: 70px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  padding: 13px 8px 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .orangeLine {
@@ -152,4 +156,22 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  background-image: url('/assets/avatar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid rgb(214, 214, 214);
+  border-radius: 3px;
+}
+
+.avatarText {
+  font-family: Trebuchet MS;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
 }
