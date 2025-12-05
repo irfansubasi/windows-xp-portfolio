@@ -427,11 +427,23 @@ export const Window = ({
     size,
   ]);
 
-  const generatePath = (title: string) => {
-    return `C:\\IrfanSubasi\\Desktop\\${title}`;
+  const generatePath = (windowId: string, title: string) => {
+    const windowDef = getWindowDefinition(windowId);
+
+    const desktopPath = 'C:\\IrfanSubasi\\Desktop';
+
+    if (windowId === 'gamesFolder') {
+      return `${desktopPath}\\${title}`;
+    }
+
+    if (windowDef?.folderItems !== undefined || windowId.endsWith('Folder')) {
+      return `C:\\${title}`;
+    }
+
+    return `${desktopPath}\\${title}`;
   };
 
-  const path = generatePath(title);
+  const path = generatePath(id, title);
 
   const resizeHandles: ResizeDirection[] = [
     'n',
