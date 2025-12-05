@@ -127,7 +127,7 @@
 .allAppsButtonIcon {
   width: 16px;
   height: 16px;
-  background-image: url('/assets/all.png');
+  background-image: url('/assets/icons/all.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -137,4 +137,19 @@
   font-family: 'MSSSB', Tahoma, Trebuchet MS, Arial, sans-serif;
   font-size: 11px;
   color: #000;
+}
+
+.rightPanel {
+  background-color: rgb(191, 219, 254);
+  width: 50%;
+  height: 100%;
+  padding: 0 4px;
+}
+
+.startMenuIconRight {
+  width: 28px;
+  height: 28px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }

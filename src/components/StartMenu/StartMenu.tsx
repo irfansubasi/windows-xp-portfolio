@@ -1,17 +1,19 @@
 import { gameDefinitions } from '../../config/gameDefinitions';
-import { desktopIcons } from '../../config/windowDefinitions';
+import {
+  leftPanelItems,
+  rightPanelItems,
+} from '../../config/windowDefinitions';
 import { useWindowContext } from '../../context/useWindowContext';
 import styles from './StartMenu.module.css';
 
 export default function StartMenu() {
   const { openWindow } = useWindowContext();
 
-  const resumeItem = desktopIcons.find((icon) => icon.id === 'resume');
-  const contactItem = desktopIcons.find((icon) => icon.id === 'contact');
+  const resumeItem = leftPanelItems.find((icon) => icon.id === 'resume');
+  const contactItem = leftPanelItems.find((icon) => icon.id === 'contact');
 
-  const otherItems = desktopIcons.filter(
-    (icon) =>
-      icon.id !== 'resume' && icon.id !== 'contact' && icon.id !== 'gamesFolder'
+  const otherItems = leftPanelItems.filter(
+    (icon) => icon.id !== 'resume' && icon.id !== 'contact'
   );
 
   const featuredGames = gameDefinitions.filter((game) =>
@@ -19,7 +21,7 @@ export default function StartMenu() {
   );
 
   const handleOpenApp = (
-    icon: (typeof desktopIcons)[0] | (typeof gameDefinitions)[0]
+    icon: (typeof leftPanelItems)[0] | (typeof gameDefinitions)[0]
   ) => {
     openWindow(
       icon.id,
@@ -63,11 +65,10 @@ export default function StartMenu() {
               className={styles.startMenuIconGroup}
               onClick={() => handleOpenApp(contactItem)}
             >
-              <img
-                src={contactItem.icon}
-                alt={contactItem.name}
+              <div
                 className={styles.startMenuIcon}
-              />
+                style={{ backgroundImage: `url(${contactItem.icon})` }}
+              ></div>
               <div className={`${styles.startMenuText} ${styles.boldText}`}>
                 {contactItem.name}
               </div>
@@ -82,11 +83,10 @@ export default function StartMenu() {
               className={styles.startMenuIconGroup}
               onClick={() => handleOpenApp(icon)}
             >
-              <img
-                src={icon.icon}
-                alt={icon.name}
+              <div
                 className={styles.startMenuIcon}
-              />
+                style={{ backgroundImage: `url(${icon.icon})` }}
+              ></div>
               <div className={styles.startMenuText}>{icon.name}</div>
             </div>
           ))}
@@ -97,11 +97,10 @@ export default function StartMenu() {
               className={styles.startMenuIconGroup}
               onClick={() => handleOpenApp(game)}
             >
-              <img
-                src={game.icon}
-                alt={game.name}
+              <div
                 className={styles.startMenuIcon}
-              />
+                style={{ backgroundImage: `url(${game.icon})` }}
+              ></div>
               <div className={styles.startMenuText}>{game.name}</div>
             </div>
           ))}
@@ -113,7 +112,23 @@ export default function StartMenu() {
             <div className={styles.allAppsButtonIcon}></div>
           </div>
         </div>
-        <div className={styles.rightPanel}></div>
+        <div className={styles.rightPanel}>
+          {rightPanelItems.map((item) => (
+            <div
+              className={styles.startMenuIconGroup}
+              key={item.id}
+              onClick={() => handleOpenApp(item)}
+            >
+              <div
+                className={styles.startMenuIconRight}
+                style={{ backgroundImage: `url(${item.icon})` }}
+              ></div>
+              <div className={`${styles.startMenuText} ${styles.boldText}`}>
+                {item.name}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div className={styles.bottomBar}></div>
     </div>

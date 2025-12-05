@@ -6,6 +6,7 @@ import { ContactContent } from '../components/Windows/WindowContent/ContactConte
 import { PaintContent } from '../components/Windows/WindowContent/PaintContent';
 import { GamesFolderContent } from '../components/Windows/WindowContent/GamesFolderContent';
 import { gameDefinitions } from './gameDefinitions';
+import { MyDocumentsFolderContent } from '../components/Windows/WindowContent/MyDocumentsFolderContent';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
@@ -22,6 +23,13 @@ export interface WindowDefinition {
   icon: string;
   windowContent: ReactNode | null;
   windowConfig?: WindowConfig;
+  folderItems?: string[];
+}
+
+export interface FolderItem {
+  id: string;
+  name: string;
+  icon: string;
 }
 
 const definitions: WindowDefinition[] = [
@@ -95,11 +103,44 @@ const definitions: WindowDefinition[] = [
       size: { width: 600, height: 400 },
     },
   },
+  {
+    id: 'myDocumentsFolder',
+    name: 'My Documents',
+    icon: '/assets/icons/MyDocuments.png',
+    windowContent: <MyDocumentsFolderContent />,
+    folderItems: ['resume'],
+    windowConfig: {
+      size: { width: 600, height: 400 },
+    },
+  },
 ];
 
 const allDefinitions = [...definitions, ...gameDefinitions];
 
-export const desktopIcons = definitions;
+export const desktopIcons = definitions.filter(
+  (icon) => icon.id !== 'myDocumentsFolder'
+);
+
+export const leftPanelItems = desktopIcons.filter(
+  (icon) => icon.id !== 'myDocumentsFolder' && icon.id !== 'gamesFolder'
+);
+
+export const rightPanelItems = allDefinitions.filter(
+  (icon) => icon.id === 'myDocumentsFolder'
+);
 
 export const getWindowDefinition = (id: string) =>
   allDefinitions.find((definition) => definition.id === id);
+
+export const getFolderItems = (folderId: string): FolderItem[] => {
+  const folder = allDefinitions.find((d) => d.id === folderId);
+  if (!folder?.folderItems) return [];
+
+  return folder.folderItems
+    .map((id) => {
+      const def = getWindowDefinition(id);
+      if (!def) return null;
+      return { id: def.id, name: def.name, icon: def.icon };
+    })
+    .filter((item): item is FolderItem => item !== null);
+};
