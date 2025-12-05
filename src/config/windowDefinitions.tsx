@@ -7,6 +7,7 @@ import { PaintContent } from '../components/Windows/WindowContent/PaintContent';
 import { GamesFolderContent } from '../components/Windows/WindowContent/GamesFolderContent';
 import { gameDefinitions } from './gameDefinitions';
 import { MyDocumentsFolderContent } from '../components/Windows/WindowContent/MyDocumentsFolderContent';
+import { MyPicturesFolderContent } from '../components/Windows/WindowContent/MyPicturesFolderContent';
 
 export interface WindowConfig {
   size?: { width: number; height: number };
@@ -113,12 +114,21 @@ const definitions: WindowDefinition[] = [
       size: { width: 600, height: 400 },
     },
   },
+  {
+    id: 'myPicturesFolder',
+    name: 'My Pictures',
+    icon: '/assets/icons/MyPictures.png',
+    windowContent: <MyPicturesFolderContent />,
+    windowConfig: {
+      size: { width: 600, height: 400 },
+    },
+  },
 ];
 
 const allDefinitions = [...definitions, ...gameDefinitions];
 
 export const desktopIcons = definitions.filter(
-  (icon) => icon.id !== 'myDocumentsFolder'
+  (icon) => icon.id !== 'myDocumentsFolder' && icon.id !== 'myPicturesFolder'
 );
 
 export const leftPanelItems = desktopIcons.filter(
@@ -126,7 +136,7 @@ export const leftPanelItems = desktopIcons.filter(
 );
 
 export const rightPanelItems = allDefinitions.filter(
-  (icon) => icon.id === 'myDocumentsFolder'
+  (icon) => icon.id === 'myDocumentsFolder' || icon.id === 'myPicturesFolder'
 );
 
 export const getWindowDefinition = (id: string) =>
