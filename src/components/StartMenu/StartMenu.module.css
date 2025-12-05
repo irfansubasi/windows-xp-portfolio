@@ -126,6 +126,7 @@
   gap: 4px;
   padding: 8px 0 8px 36px;
   flex-grow: 1;
+  margin-bottom: 2px;
 }
 
 .allAppsButtonIcon {
@@ -174,4 +175,14 @@
   font-size: 18px;
   font-weight: 700;
   color: #fff;
+}
+
+.startMenuIconGroup:hover,
+.allAppsButton:hover {
+  background-color: rgb(59, 130, 246);
+}
+
+.startMenuIconGroup:hover .startMenuText,
+.allAppsButton:hover .allAppsButtonText {
+  color: #ffffff;
 }
