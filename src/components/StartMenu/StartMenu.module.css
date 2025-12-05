@@ -76,3 +76,65 @@
   width: 100%;
   height: 40px;
 }
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 4px;
+}
+
+.startMenuIconGroup {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.startMenuIcon {
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.startMenuText {
+  font-size: 11px;
+  color: #000;
+}
+
+.boldText {
+  font-family: 'MSSSB', 'MSSS', Tahoma, Trebuchet MS, Arial, sans-serif;
+}
+
+.startMenuIconGroupSeparator {
+  width: 83.333333%;
+  height: 2px;
+  background-color: rgb(226, 232, 240);
+  margin: 2px auto;
+}
+
+.allAppsButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 8px 36px;
+  flex-grow: 1;
+}
+
+.allAppsButtonIcon {
+  width: 16px;
+  height: 16px;
+  background-image: url('/assets/all.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.allAppsButtonText {
+  font-family: 'MSSSB', Tahoma, Trebuchet MS, Arial, sans-serif;
+  font-size: 11px;
+  color: #000;
+}
