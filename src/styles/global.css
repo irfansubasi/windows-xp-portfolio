@@ -29,6 +29,7 @@ html body {
 body {
   font-family: 'MSSS', Tahoma, Trebuchet MS, Arial, sans-serif;
   font-size: 12px;
+  line-height: 1;
   background: #008080;
   cursor: url('/assets/cursors/default_arrow.cur'), auto;
 }
