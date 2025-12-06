@@ -75,7 +75,11 @@ export const Taskbar = () => {
 
   return (
     <div className={styles.taskbar}>
-      <div id={styles.startButton} onClick={toggleStartMenu}></div>
+      <div
+        id={styles.startButton}
+        onClick={toggleStartMenu}
+        data-start-button="true"
+      ></div>
       <div className={styles.bar}>
         {sortedWindows.map((window) => {
           const isActive = focusedWindowId === window.id && !window.isMinimized;

@@ -28,8 +28,8 @@ export default function StartMenu() {
         startMenuRef.current &&
         !startMenuRef.current.contains(event.target as Node)
       ) {
-        const startButton = document.getElementById('startButton');
-        if (startButton && startButton.contains(event.target as Node)) {
+        const target = event.target as HTMLElement;
+        if (target.closest('[data-start-button]')) {
           return;
         }
         closeStartMenu();
