@@ -115,8 +115,8 @@
 
 .startMenuIconGroupSeparator {
   width: 83.333333%;
-  height: 2px;
-  background-color: rgb(226, 232, 240);
+  height: 1px;
+  background-color: rgba(164, 183, 204, 0.7);
   margin: 2px auto;
 }
 
@@ -149,6 +149,8 @@
   width: 50%;
   height: 100%;
   padding: 0 4px;
+  display: flex;
+  flex-direction: column;
 }
 
 .startMenuIconRight {

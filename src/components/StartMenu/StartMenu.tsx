@@ -131,6 +131,40 @@ export default function StartMenu() {
               </div>
             </div>
           ))}
+          <div className={styles.startMenuIconGroupSeparator}></div>
+          <a
+            className={styles.startMenuIconGroup}
+            href="https://www.linkedin.com/in/irfansubasi/"
+            target="_blank"
+          >
+            <div
+              className={styles.startMenuIconRight}
+              style={{ backgroundImage: `url(/assets/icons/linkedin.png)` }}
+            ></div>
+            <div className={styles.startMenuText}>LinkedIn</div>
+          </a>
+          <a
+            className={styles.startMenuIconGroup}
+            href="https://github.com/irfansubasi/"
+            target="_blank"
+          >
+            <div
+              className={styles.startMenuIconRight}
+              style={{ backgroundImage: `url(/assets/icons/github.png)` }}
+            ></div>
+            <div className={styles.startMenuText}>GitHub</div>
+          </a>
+          <a
+            className={styles.startMenuIconGroup}
+            href="https://www.instagram.com/irfansubasii/"
+            target="_blank"
+          >
+            <div
+              className={styles.startMenuIconRight}
+              style={{ backgroundImage: `url(/assets/icons/instagram.webp)` }}
+            ></div>
+            <div className={styles.startMenuText}>Instagram</div>
+          </a>
         </div>
       </div>
       <div className={styles.bottomBar}></div>
