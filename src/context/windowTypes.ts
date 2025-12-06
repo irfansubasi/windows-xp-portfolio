@@ -31,6 +31,9 @@ export interface WindowData {
 export interface WindowContextType {
   windows: WindowData[];
   focusedWindowId: string | null;
+  isStartMenuOpen: boolean;
+  toggleStartMenu: () => void;
+  closeStartMenu: () => void;
   openWindow: (
     id: string,
     title: string,

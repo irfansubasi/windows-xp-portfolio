@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { gameDefinitions } from '../../config/gameDefinitions';
 import {
   leftPanelItems,
@@ -7,7 +8,8 @@ import { useWindowContext } from '../../context/useWindowContext';
 import styles from './StartMenu.module.css';
 
 export default function StartMenu() {
-  const { openWindow } = useWindowContext();
+  const { openWindow, closeStartMenu, isStartMenuOpen } = useWindowContext();
+  const startMenuRef = useRef<HTMLDivElement>(null);
 
   const resumeItem = leftPanelItems.find((icon) => icon.id === 'resume');
   const contactItem = leftPanelItems.find((icon) => icon.id === 'contact');
@@ -19,6 +21,29 @@ export default function StartMenu() {
   const featuredGames = gameDefinitions.filter((game) =>
     ['minesweeper', 'quake', 'spiderSolitaire'].includes(game.id)
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        startMenuRef.current &&
+        !startMenuRef.current.contains(event.target as Node)
+      ) {
+        const startButton = document.getElementById('startButton');
+        if (startButton && startButton.contains(event.target as Node)) {
+          return;
+        }
+        closeStartMenu();
+      }
+    };
+
+    if (isStartMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isStartMenuOpen, closeStartMenu]);
 
   const handleOpenApp = (
     icon: (typeof leftPanelItems)[0] | (typeof gameDefinitions)[0]
@@ -37,10 +62,15 @@ export default function StartMenu() {
         disableResize: icon.windowConfig?.disableResize,
       }
     );
+    closeStartMenu();
   };
 
+  if (!isStartMenuOpen) {
+    return null;
+  }
+
   return (
-    <div className={styles.startMenu}>
+    <div className={styles.startMenu} ref={startMenuRef}>
       <div className={styles.topBar}>
         <div className={styles.avatar}></div>
         <div className={styles.avatarText}>IrfanSubasi</div>

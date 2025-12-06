@@ -23,8 +23,13 @@ const systemTrayItems = [
 ];
 
 export const Taskbar = () => {
-  const { windows, focusedWindowId, focusWindow, toggleMinimize } =
-    useWindowContext();
+  const {
+    windows,
+    focusedWindowId,
+    focusWindow,
+    toggleMinimize,
+    toggleStartMenu,
+  } = useWindowContext();
   const [time, setTime] = useState<string>('');
   const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
@@ -70,7 +75,7 @@ export const Taskbar = () => {
 
   return (
     <div className={styles.taskbar}>
-      <div id={styles.startButton}></div>
+      <div id={styles.startButton} onClick={toggleStartMenu}></div>
       <div className={styles.bar}>
         {sortedWindows.map((window) => {
           const isActive = focusedWindowId === window.id && !window.isMinimized;

@@ -58,6 +58,7 @@ const calculateNewWindowPosition = (
 export const WindowProvider = ({ children }: WindowProviderProps) => {
   const [windows, setWindows] = useState<WindowData[]>([]);
   const [focusedWindowId, setFocusedWindowId] = useState<string | null>(null);
+  const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const nextOrderRef = useRef(0);
 
   const openWindow = useCallback(
@@ -231,11 +232,22 @@ export const WindowProvider = ({ children }: WindowProviderProps) => {
     [focusedWindowId]
   );
 
+  const toggleStartMenu = useCallback(() => {
+    setIsStartMenuOpen((prev) => !prev);
+  }, []);
+
+  const closeStartMenu = useCallback(() => {
+    setIsStartMenuOpen(false);
+  }, []);
+
   return (
     <WindowContext.Provider
       value={{
         windows,
         focusedWindowId,
+        isStartMenuOpen,
+        toggleStartMenu,
+        closeStartMenu,
         openWindow,
         closeWindow,
         focusWindow,
